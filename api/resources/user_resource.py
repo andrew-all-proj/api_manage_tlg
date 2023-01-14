@@ -1,6 +1,5 @@
 from flask_apispec.views import MethodResource
 from flask_restful import reqparse
-
 from api import db, app, auth, g, Config
 from api.models.users_model import UserModel
 from api.sсhemas.user_sсhema import UserSchema, UserRequestSchema
@@ -10,10 +9,11 @@ from flask_apispec import  marshal_with, use_kwargs, doc
 
 @doc(description='Api for user.', tags=['Users'])
 class UsersListResource(MethodResource):
+    @auth.login_required
+    @doc(security=[{"basicAuth": []}])
     @marshal_with(UserSchema(many=True), code=200)
-    @doc(summary='Get User by id')
+    @doc(summary='Get all user')
     @doc(description='Full: Get all User')
-    #@auth.login_required
     def get(self):
         #print(g.user.name)
         users = UserModel.query.all()

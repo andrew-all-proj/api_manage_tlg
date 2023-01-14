@@ -2,7 +2,7 @@ import datetime
 from passlib.apps import custom_app_context as pwd_context
 from api import db, Config
 from api.models.auth_model import AuthHistoryModel
-from api.models.chanels_model import UserChanelModel, ChanelModel
+from api.models.channels_model import UserChannelModel, ChannelModel
 from api.models.media_contents_model import MediaContentModel
 from api.models.posts_model import PostsModel
 from itsdangerous import URLSafeSerializer as Serialier
@@ -23,8 +23,8 @@ class UserModel(db.Model):
     is_archive = db.Column(db.Boolean, nullable=False, default=False)
     media = db.relationship(MediaContentModel)
     posts = db.relationship(PostsModel)
-    user_chanel = db.relationship(UserChanelModel)
-    admin_chanel = db.relationship(ChanelModel)
+    user_channel = db.relationship(UserChannelModel)
+    admin_channel = db.relationship(ChannelModel)
     auth = db.relationship(AuthHistoryModel)
 
     def __init__(self, email, password, name, id_telegram):

@@ -13,5 +13,5 @@ class TagModel(db.Model):
 
     id_tag = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
-    id_chanel = db.Column(db.Integer, db.ForeignKey("chanels.id_chanel"))
+    id_channel = db.Column(db.Integer, db.ForeignKey("channels.id_channel"))
     tags = db.relationship(MediaTagModel)

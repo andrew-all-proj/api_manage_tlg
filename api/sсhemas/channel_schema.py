@@ -5,18 +5,18 @@ from api.models.users_model import UserModel
 # object ------>  dict ----------> json
 
 # Сериализация ответа(response)
-class ChanelSchema(ma.SQLAlchemySchema):
+class ChannelSchema(ma.SQLAlchemySchema):
     class Meta:
         model = UserModel
-        fields = ('id_chanel', 'name_chanel', "link_chanel", "id_telegram")
+        fields = ('id_channel', 'name_channel', "link_channel", "id_telegram")
         #exclude = ['id_user', 'name'] исключить
 
 
 # Десериализация запроса(request)
-class ChanelRequestSchema(ma.SQLAlchemySchema):
+class ChannelRequestSchema(ma.SQLAlchemySchema):
     class Meta:
         model = UserModel
 
-    name_chanel = ma.Str(required=True)
-    link_chanel = ma.Str(required=True)
+    name_channel = ma.Str(required=True)
+    link_channel = ma.Str(required=True)
     id_telegram = ma.Str(required=True)
