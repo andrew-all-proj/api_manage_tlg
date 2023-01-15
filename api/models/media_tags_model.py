@@ -1,12 +1,15 @@
 from api import db
 
-class MediaTagModel(db.Model):
+"""class MediaTagModel(db.Model):
     __tablename__ = "media_tags"
     id_media_tags = db.Column(db.Integer, primary_key=True)
     id_tag = db.Column(db.Integer, db.ForeignKey("tags.id_tag"), nullable=False)
-    id_media = db.Column(db.Integer, db.ForeignKey("media_contents.id_media"), nullable=False)
+    id_media = db.Column(db.Integer, db.ForeignKey("media_contents.id_media"), nullable=False)"""
 
-
+tags = db.Table('media_tags',
+                db.Column('id_tag', db.Integer, db.ForeignKey('tags.id_tag'), primary_key=True),
+                db.Column('id_media', db.Integer, db.ForeignKey('media_contents.id_media'), primary_key=True)
+                )
 
 class TagModel(db.Model):
     __tablename__ = "tags"
@@ -14,4 +17,5 @@ class TagModel(db.Model):
     id_tag = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     id_channel = db.Column(db.Integer, db.ForeignKey("channels.id_channel"))
-    tags = db.relationship(MediaTagModel)
+ #   tags = db.relationship(MediaTagModel)
+

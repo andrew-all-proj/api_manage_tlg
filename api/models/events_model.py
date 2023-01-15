@@ -12,3 +12,17 @@ class EventModel(db.Model):
     date_start = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now)
     date_stop = db.Column(db.DateTime)
     completed = db.Column(db.Boolean, nullable=False, default=False)
+
+    def __init__(self, id_post, id_channel, date_start, date_stop=None, id_message=0):
+        self.id_post = id_post
+        self.id_channel = id_channel
+        self.date_start = date_start
+        self.date_stop = date_stop
+        self.id_message = id_message
+
+    def save(self):
+        try:
+            db.session.add(self)
+            db.session.commit()
+        except:
+            db.session.rollback()

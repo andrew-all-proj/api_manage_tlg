@@ -1,5 +1,6 @@
 from api import ma
 from api.models.media_contents_model import MediaContentModel, TypeMediaModel
+from api.sсhemas.tag_schema import TagSchema
 from api.sсhemas.type_media_schema import TypeMediaSchema
 
 #       schema        flask-restful
@@ -16,8 +17,8 @@ class MediaContentsSchema(ma.SQLAlchemySchema):
     id_media = ma.auto_field(required=True)
     type_media = ma.Nested(TypeMediaSchema)
     date_download = ma.auto_field(required=True)
-    id_type_media = ma.auto_field(required=True)
     description = ma.auto_field()
+    tags = ma.Nested(TagSchema, many=True)
 
 
 # Десериализация запроса(request)
