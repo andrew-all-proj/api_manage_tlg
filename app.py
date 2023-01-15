@@ -4,6 +4,7 @@ from api.resources.channel_resource import ChannelsListResource
 from api.resources.events_resource import EventsListResource, EventsResource
 from api.resources.media_contents_resource import MediaListResource
 from api.resources.posts_resource import PostsListResource, AddMediaToPostResource
+from api.resources.tags_resource import TagsListResource, MediaSetTagsResource
 from config import Config
 from api.resources.user_resource import UsersListResource, UserResource
 
@@ -31,6 +32,10 @@ api.add_resource(EventsListResource,
                  f'/{Config.VERSION}/events/<int:id_channel>')  # GET
 api.add_resource(EventsResource,
                  f'/{Config.VERSION}/events')  # POST
+api.add_resource(TagsListResource,
+                 f'/{Config.VERSION}/tags')  # POST
+api.add_resource(MediaSetTagsResource,
+                 f'/{Config.VERSION}/media/<int:id_media>/set_tags')  # POST
 
 docs.register(TokenResource)
 docs.register(UserResource)
@@ -41,6 +46,8 @@ docs.register(PostsListResource)
 docs.register(AddMediaToPostResource)
 docs.register(EventsListResource)
 docs.register(EventsResource)
+docs.register(TagsListResource)
+docs.register(MediaSetTagsResource)
 
 if __name__ == '__main__':
     app.run(debug=Config.DEBUG, port=Config.PORT)

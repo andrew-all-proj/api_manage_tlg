@@ -14,4 +14,13 @@ class TagSchema(ma.SQLAlchemySchema):
         model = TagModel
 
     id_tag = ma.auto_field(required=True)
-    name = ma.auto_field(required=True)
+    tag_name = ma.auto_field(required=True)
+
+
+class TagListSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = TagModel
+
+    id_channel = ma.auto_field(required=True)
+    tag_name = ma.auto_field(required=True)
+    id_tag = ma.auto_field(required=True)

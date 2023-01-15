@@ -2,9 +2,10 @@ import datetime
 from api import db
 from api.models.events_model import EventModel
 from api.models.media_tags_model import TagModel
+from api.models.mixins import ModelDbExt
 
 
-class UserChannelModel(db.Model):
+class UserChannelModel(db.Model, ModelDbExt):
     __tablename__ = "users_channels"
     id_user_channel = db.Column(db.Integer, primary_key=True)
     id_user = db.Column(db.Integer, db.ForeignKey("users.id_user"), nullable=False)
@@ -14,16 +15,9 @@ class UserChannelModel(db.Model):
         self.id_channel = id_channel
         self.id_user = id_user
 
-    def save(self):
-        try:
-            db.session.add(self)
-            db.session.commit()
-        except:
-            db.session.rollback()
 
 
-
-class ChannelModel(db.Model):
+class ChannelModel(db.Model, ModelDbExt):
     __tablename__ = "channels"
 
     id_channel = db.Column(db.Integer, primary_key=True)
@@ -42,11 +36,3 @@ class ChannelModel(db.Model):
         self.link_channel = link_channel
         self.id_telegram = id_telegram
         self.id_user_admin = id_user_admin
-
-
-    def save(self):
-        try:
-            db.session.add(self)
-            db.session.commit()
-        except:
-            db.session.rollback()

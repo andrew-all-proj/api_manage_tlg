@@ -4,12 +4,13 @@ from api import db, Config
 from api.models.auth_model import AuthHistoryModel
 from api.models.channels_model import UserChannelModel, ChannelModel
 from api.models.media_contents_model import MediaContentModel
+from api.models.mixins import ModelDbExt
 from api.models.posts_model import PostsModel
 from itsdangerous import URLSafeSerializer as Serialier
 from itsdangerous import BadSignature, SignatureExpired
 
 
-class UserModel(db.Model):
+class UserModel(db.Model, ModelDbExt):
     __tablename__ = "users"
 
     id_user = db.Column(db.Integer, primary_key=True)
@@ -42,13 +43,6 @@ class UserModel(db.Model):
     def generate_auth_token(self, expiration=600):
         s = Serialier(Config.SECRET_KEY)
         return s.dumps({'id_user': self.id_user})
-
-    def save(self):
-        try:
-            db.session.add(self)
-            db.session.commit()
-        except:
-            db.session.rollback()
             
 
     @staticmethod

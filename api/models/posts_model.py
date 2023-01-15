@@ -1,7 +1,7 @@
 from api import db
 from api.models.events_model import EventModel
 from api.models.media_contents_model import MediaContentModel
-
+from api.models.mixins import ModelDbExt
 
 media = db.Table('posts_media',
                 db.Column('id_post', db.Integer, db.ForeignKey('posts.id_post'), primary_key=True),
@@ -9,7 +9,7 @@ media = db.Table('posts_media',
                 )
 
 
-class PostsModel(db.Model):
+class PostsModel(db.Model, ModelDbExt):
     __tablename__ = "posts"
 
     id_post = db.Column(db.Integer, primary_key=True)
@@ -22,10 +22,3 @@ class PostsModel(db.Model):
         self.text = text
         self.id_user = id_user
 
-
-    def save(self):
-        try:
-            db.session.add(self)
-            db.session.commit()
-        except:
-            db.session.rollback()

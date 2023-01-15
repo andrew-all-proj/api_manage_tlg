@@ -1,8 +1,9 @@
 import datetime
 from api import db
+from api.models.mixins import ModelDbExt
 
 
-class EventModel(db.Model):
+class EventModel(db.Model, ModelDbExt):
     __tablename__ = "events"
 
     id_event = db.Column(db.Integer, primary_key=True)
@@ -19,10 +20,3 @@ class EventModel(db.Model):
         self.date_start = date_start
         self.date_stop = date_stop
         self.id_message = id_message
-
-    def save(self):
-        try:
-            db.session.add(self)
-            db.session.commit()
-        except:
-            db.session.rollback()

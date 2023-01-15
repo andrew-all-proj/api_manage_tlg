@@ -1,6 +1,7 @@
 import datetime
 from api import db
 from api.models.media_tags_model import TagModel, tags
+from api.models.mixins import ModelDbExt
 
 
 class TypeMediaModel(db.Model):
@@ -12,7 +13,7 @@ class TypeMediaModel(db.Model):
     extension = db.Column(db.String(20), nullable=False)
 
 
-class MediaContentModel(db.Model):
+class MediaContentModel(db.Model, ModelDbExt):
     __tablename__ = "media_contents"
 
     id_media = db.Column(db.Integer, primary_key=True)
@@ -33,12 +34,6 @@ class MediaContentModel(db.Model):
         self.id_user = id_user
         self.description = description
 
-    def save(self):
-        try:
-            db.session.add(self)
-            db.session.commit()
-        except:
-            db.session.rollback()
 
 
 

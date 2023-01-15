@@ -1,11 +1,8 @@
-import os
 from flask_apispec.views import MethodResource
 from api import auth, g, db
 from api.models.channels_model import ChannelModel
 from api.models.events_model import EventModel
-from api.models.media_contents_model import TypeMediaModel, MediaContentModel
 from api.sсhemas.events_schema import EventsSchema, EventsRequestSchema
-from api.sсhemas.media_contents_schema import MediaContentsSchema, MediaContentsRequestSchema
 from flask_apispec import marshal_with, use_kwargs, doc
 from sqlalchemy import and_
 
