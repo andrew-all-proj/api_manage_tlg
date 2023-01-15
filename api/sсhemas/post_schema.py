@@ -1,11 +1,12 @@
 from api import ma
 from api.models.posts_model import PostsModel
+from api.sсhemas.media_contents_schema import MediaContentsSchema
+
 
 #       schema        flask-restful
 # object ------>  dict ----------> json
 
 # Сериализация ответа(response)
-from api.sсhemas.media_contents_schema import MediaContentsSchema
 
 
 class PostSchema(ma.SQLAlchemySchema):

@@ -3,6 +3,14 @@ from api import db
 from api.models.media_tags_model import MediaTagModel
 
 
+class TypeMediaModel(db.Model):
+    __tablename__ = "types_media"
+
+    id_type_media = db.Column(db.Integer, primary_key=True)
+    type_media = db.Column(db.String(20), nullable=False)
+    name_dir = db.Column(db.String(250), nullable=False)
+    extension = db.Column(db.String(20), nullable=False)
+
 
 class MediaContentModel(db.Model):
     __tablename__ = "media_contents"
@@ -16,6 +24,7 @@ class MediaContentModel(db.Model):
     id_user = db.Column(db.Integer, db.ForeignKey("users.id_user"), nullable=False)
     remove = db.Column(db.Boolean, nullable=False, default=False)
     tags = db.relationship(MediaTagModel)
+    type_media = db.relationship(TypeMediaModel, backref='types_media', uselist=False, lazy='subquery')
 
 
     def __init__(self, id_user, id_type_media, name_file, description=None):
@@ -32,12 +41,8 @@ class MediaContentModel(db.Model):
             db.session.rollback()
 
 
-class TypeMediaModel(db.Model):
-    __tablename__ = "types_media"
 
-    id_type_media = db.Column(db.Integer, primary_key=True)
-    type_media = db.Column(db.String(20), nullable=False)
-    name_dir = db.Column(db.String(250), nullable=False)
-    extension = db.Column(db.String(20), nullable=False)
-    media_content = db.relationship(MediaContentModel)
+
+
+
 

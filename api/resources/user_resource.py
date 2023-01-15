@@ -9,7 +9,7 @@ from flask_apispec import  marshal_with, use_kwargs, doc
 
 @doc(description='Api for user.', tags=['Users'])
 class UsersListResource(MethodResource):
-    #@auth.login_required
+    @auth.login_required
     @doc(security=[{"basicAuth": []}])
     @marshal_with(UserSchema(many=True), code=200)
     @doc(summary='Get all user delete after')

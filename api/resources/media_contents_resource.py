@@ -1,6 +1,6 @@
 import os
 from flask_apispec.views import MethodResource
-from api import auth, g
+from api import auth, g, db
 from api.models.media_contents_model import TypeMediaModel, MediaContentModel
 from api.sсhemas.media_contents_schema import MediaContentsSchema, MediaContentsRequestSchema
 from flask_apispec import marshal_with, use_kwargs, doc
@@ -14,9 +14,7 @@ class MediaListResource(MethodResource):
     @doc(summary='Get all media')
     @doc(description='Full: Get all media')
     def get(self):
-        media = MediaContentModel.query.join(TypeMediaModel,
-                                             TypeMediaModel.id_type_media == MediaContentModel.id_type_media). \
-            filter(MediaContentModel.id_user == g.user.id_user).all()
+        media = MediaContentModel.query.filter(MediaContentModel.id_user == g.user.id_user).all()
         return media, 200
 
     @auth.login_required
