@@ -1,5 +1,6 @@
 from api import ma
-from api.models.users_model import UserModel
+from api.models.channels_model import ChannelModel, UserChannelModel
+
 
 #       schema        flask-restful
 # object ------>  dict ----------> json
@@ -7,15 +8,18 @@ from api.models.users_model import UserModel
 # Сериализация ответа(response)
 class ChannelSchema(ma.SQLAlchemySchema):
     class Meta:
-        model = UserModel
-        fields = ('id_channel', 'name_channel', "link_channel", "id_telegram")
-        #exclude = ['id_user', 'name'] исключить
+        model = ChannelModel
+
+    id_channel = ma.auto_field(required=True)
+    name_channel = ma.auto_field()
+    link_channel = ma.auto_field(required=True)
+    id_telegram = ma.auto_field(required=True)
 
 
 # Десериализация запроса(request)
 class ChannelRequestSchema(ma.SQLAlchemySchema):
     class Meta:
-        model = UserModel
+        model = ChannelModel
 
     name_channel = ma.Str(required=True)
     link_channel = ma.Str(required=True)

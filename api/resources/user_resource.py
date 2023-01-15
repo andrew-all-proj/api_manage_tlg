@@ -9,10 +9,10 @@ from flask_apispec import  marshal_with, use_kwargs, doc
 
 @doc(description='Api for user.', tags=['Users'])
 class UsersListResource(MethodResource):
-    @auth.login_required
+    #@auth.login_required
     @doc(security=[{"basicAuth": []}])
     @marshal_with(UserSchema(many=True), code=200)
-    @doc(summary='Get all user')
+    @doc(summary='Get all user delete after')
     @doc(description='Full: Get all User')
     def get(self):
         #print(g.user.name)
@@ -32,6 +32,7 @@ class UsersListResource(MethodResource):
 
 @doc(description='Api for user.', tags=['Users'])
 class UserResource(MethodResource):
+    @auth.login_required
     @marshal_with(UserSchema, code=200)
     @doc(description='Full: Get User by id')
     @doc(summary='Get User by id')
@@ -39,10 +40,4 @@ class UserResource(MethodResource):
         user = UserModel.query.get(user_id)
         return user, 200
 
-    @doc(description='Full: Post User by id')
-    def post(self, kwargs=None):
-        user = UserModel(**kwargs)
-        user.save()
-        if not user.id:
-            return f"User with username:{user.name} already exist", 400
-        return user, 201
+

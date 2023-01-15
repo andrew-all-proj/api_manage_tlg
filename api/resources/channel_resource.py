@@ -1,12 +1,8 @@
 from flask_apispec.views import MethodResource
-from flask_restful import reqparse
-from api import db, app, auth, g, Config
+from api import auth, g
 from api.models.channels_model import ChannelModel, UserChannelModel
-from api.models.users_model import UserModel
 from api.sсhemas.channel_schema import ChannelSchema, ChannelRequestSchema
-from api.sсhemas.user_sсhema import UserSchema, UserRequestSchema
-from flask_apispec import  marshal_with, use_kwargs, doc
-
+from flask_apispec import marshal_with, use_kwargs, doc
 
 
 @doc(description='Api for channel', tags=['Channels'])
@@ -17,7 +13,7 @@ class ChannelsListResource(MethodResource):
     @doc(summary='Get all channels')
     @doc(description='Full: Get all channel')
     def get(self):
-        channels = ChannelModel.query.join(UserChannelModel, ChannelModel.id_channel==UserChannelModel.id_channel).\
+        channels = ChannelModel.query.join(UserChannelModel, ChannelModel.id_channel == UserChannelModel.id_channel). \
             filter_by(id_user=g.user.id_user).all()
         return channels, 200
 
@@ -34,4 +30,3 @@ class ChannelsListResource(MethodResource):
         if not channel.id_channel:
             return f"Channel is :{channel.name_channel} already exist", 400
         return channel, 201
-
