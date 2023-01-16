@@ -1,0 +1,46 @@
+{
+  "model": "ChannelModel",
+  "records": [
+    {
+      "name_channel": "channel 1",
+      "link_channel": "@link_chanel1",
+      "id_telegram": "-123456789",
+      "id_user_admin": 1
+    },
+    {
+      "name_channel": "channel 2",
+      "link_channel": "@link_chanel2",
+      "id_telegram": "-123456788",
+      "id_user_admin": 1
+    },
+    {
+      "name_channel": "channel 3",
+      "link_channel": "@link_chanel3",
+      "id_telegram": "-123456787",
+      "id_user_admin": 1
+    },
+    {
+      "name_channel": "channel 4",
+      "link_channel": "@link_chanel4",
+      "id_telegram": "-123456786",
+      "id_user_admin": 2
+    },
+    {
+      "name_channel": "channel 5",
+      "link_channel": "@link_chanel5",
+      "id_telegram": "-123456785",
+      "id_user_admin": 3
+    },
+    {
+      "name_channel": "channel 6",
+      "link_channel": "@link_chanel6",
+      "id_telegram": "-123456784",
+      "id_user_admin": 4
+    },
+    {
+      "name_channel": "channel 7",
+      "link_channel": "@link_chanel7",
+      "id_telegram": "-123456783",
+      "id_user_admin": 5,
+  ]
+}

@@ -14,7 +14,7 @@ class UserModel(db.Model, ModelDbExt):
     __tablename__ = "users"
 
     id_user = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(30), nullable=False)
+    user_name = db.Column(db.String(30), nullable=False)
     id_telegram = db.Column(db.Integer, unique=True)
     email = db.Column(db.String(50), unique=True, nullable=False, default=False)
     password = db.Column(db.String(128), nullable=False)
@@ -28,8 +28,8 @@ class UserModel(db.Model, ModelDbExt):
     admin_channel = db.relationship(ChannelModel)
     auth = db.relationship(AuthHistoryModel)
 
-    def __init__(self, email, password, name, id_telegram):
-        self.name = name
+    def __init__(self, email, password, user_name, id_telegram):
+        self.user_name = user_name
         self.id_telegram = id_telegram
         self.email = email
         self.hash_password(password)

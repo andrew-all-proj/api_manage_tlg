@@ -1,0 +1,9 @@
+{
+  "model": "PostsModel",
+  "records": [
+    {
+      "text": "valera",
+      "id_user": 123456789
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "model": "EventModel",
+  "records": [
+    {
+      "id_post": "valera",
+      "id_message": 123456789,
+      "id_channel": "valera@mail.com",
+      "date_start": "valera",
+      "date_stop": "valera"
+    }
+  ]
+}

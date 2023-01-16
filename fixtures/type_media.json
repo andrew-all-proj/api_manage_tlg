@@ -1,0 +1,11 @@
+{
+  "model": "TypeMediaModel",
+  "records": [
+    {
+      "type_media": "valera",
+      "name_dir": 123456789,
+      "email": "valera@mail.com",
+      "extension": "valera"
+    }
+  ]
+}

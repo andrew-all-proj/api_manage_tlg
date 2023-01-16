@@ -40,11 +40,11 @@ auth = HTTPBasicAuth()
 docs = FlaskApiSpec(app)
 
 @auth.verify_password
-def verify_password(name, username_or_token):
+def verify_password(user_name, username_or_token):
     from api.models.users_model import UserModel
     user = UserModel.verify_auth_token(username_or_token)
     if not user:
-        user = UserModel.query.filter_by(name=name).first()
+        user = UserModel.query.filter_by(user_name=user_name).first()
         if not user or not user.verify_password(username_or_token):
             return False
     g.user = user

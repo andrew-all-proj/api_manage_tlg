@@ -8,7 +8,7 @@ from api.models.users_model import UserModel
 class UserSchema(ma.SQLAlchemySchema):
     class Meta:
         model = UserModel
-        fields = ('id_user', 'name', "email", "id_telegram")
+        fields = ('id_user', 'user_name', "email", "id_telegram")
         #exclude = ['id_user', 'name'] исключить
 
 
@@ -17,7 +17,7 @@ class UserRequestSchema(ma.SQLAlchemySchema):
     class Meta:
         model = UserModel
 
-    name = ma.Str(required=True)
+    user_name = ma.Str(required=True)
     password = ma.Str(required=True)
     email = ma.Str(required=True)
     id_telegram = ma.Int(required=True)

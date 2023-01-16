@@ -27,7 +27,7 @@ class UsersListResource(MethodResource):
         db.session.add(user)
         db.session.commit()
         if not user.id_user:
-            return f"User with username:{user.name} already exist", 400
+            return f"User with username:{user.user_name} already exist", 400
         return user, 201
 
 @doc(description='Api for user.', tags=['Users'])

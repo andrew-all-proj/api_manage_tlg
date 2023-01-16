@@ -1,0 +1,10 @@
+{
+  "model": "TagModel",
+  "records": [
+    {
+      "id_tag": "valera",
+      "tag_name": 123456789,
+      "id_channel": "valera@mail.com",
+    }
+  ]
+}

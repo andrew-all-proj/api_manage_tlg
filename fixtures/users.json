@@ -1,0 +1,35 @@
+{
+  "model": "UserModel",
+  "records": [
+    {
+      "user_name": "valera",
+      "id_telegram": 123456789,
+      "email": "valera@mail.com",
+      "password": "valera"
+    },
+    {
+      "user_name": "vasia",
+      "id_telegram": 987456321,
+      "email": "vasia@mail.com",
+      "password": "vasia"
+    },
+    {
+      "user_name": "jonh",
+      "id_telegram": 10000000,
+      "email": "jonh@mail.com",
+      "password": "jonh"
+    },
+    {
+      "user_name": "julia",
+      "id_telegram": 20000000,
+      "email": "julia@mail.com",
+      "password": "julia"
+    },
+    {
+      "user_name": "gena",
+      "id_telegram": 30000000,
+      "email": "gena@mail.com",
+      "password": "gena"
+    }
+  ]
+}
