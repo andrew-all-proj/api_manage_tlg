@@ -41,6 +41,7 @@
       "name_channel": "channel 7",
       "link_channel": "@link_chanel7",
       "id_telegram": "-123456783",
-      "id_user_admin": 5,
+      "id_user_admin": 5
+    }
   ]
 }

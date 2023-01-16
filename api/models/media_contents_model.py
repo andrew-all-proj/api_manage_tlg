@@ -4,7 +4,7 @@ from api.models.media_tags_model import TagModel, tags
 from api.models.mixins import ModelDbExt
 
 
-class TypeMediaModel(db.Model):
+class TypeMediaModel(db.Model, ModelDbExt):
     __tablename__ = "types_media"
 
     id_type_media = db.Column(db.Integer, primary_key=True)

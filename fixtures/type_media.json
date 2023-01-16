@@ -2,10 +2,199 @@
   "model": "TypeMediaModel",
   "records": [
     {
-      "type_media": "valera",
-      "name_dir": 123456789,
-      "email": "valera@mail.com",
-      "extension": "valera"
+      "type_media": "video",
+      "name_dir": "video",
+      "extension": "mp4"
+    },
+    {
+      "type_media": "video",
+      "name_dir": "video",
+      "extension": "3gp"
+    },
+    {
+      "type_media": "video",
+      "name_dir": "video",
+      "extension": "mpeg"
+    },
+    {
+      "type_media": "video",
+      "name_dir": "video",
+      "extension": "avi"
+    },
+    {
+      "type_media": "video",
+      "name_dir": "video",
+      "extension": "dat"
+    },
+    {
+      "type_media": "video",
+      "name_dir": "video",
+      "extension": "mkv"
+    },
+    {
+      "type_media": "video",
+      "name_dir": "video",
+      "extension": "mpg"
+    },
+    {
+      "type_media": "video",
+      "name_dir": "video",
+      "extension": "rm"
+    },
+    {
+      "type_media": "video",
+      "name_dir": "video",
+      "extension": "wmv"
+    },
+    {
+      "type_media": "video",
+      "name_dir": "video",
+      "extension": "wm"
+    },
+    {
+      "type_media": "video",
+      "name_dir": "video",
+      "extension": "mov"
+    },
+    {
+      "type_media": "video",
+      "name_dir": "video",
+      "extension": "ts"
+    },
+    {
+      "type_media": "video",
+      "name_dir": "video",
+      "extension": "swf"
+    },
+    {
+      "type_media": "image",
+      "name_dir": "image",
+      "extension": "tiff"
+    },
+    {
+      "type_media": "image",
+      "name_dir": "image",
+      "extension": "bmp"
+    },
+    {
+      "type_media": "image",
+      "name_dir": "image",
+      "extension": "jpeg"
+    },
+    {
+      "type_media": "image",
+      "name_dir": "image",
+      "extension": "jpg"
+    },
+    {
+      "type_media": "image",
+      "name_dir": "image",
+      "extension": "gif"
+    },
+    {
+      "type_media": "image",
+      "name_dir": "image",
+      "extension": "png"
+    },
+    {
+      "type_media": "audio",
+      "name_dir": "audio",
+      "extension": "aac"
+    },
+    {
+      "type_media": "audio",
+      "name_dir": "audio",
+      "extension": "ac3"
+    },
+    {
+      "type_media": "audio",
+      "name_dir": "audio",
+      "extension": "aif"
+    },
+    {
+      "type_media": "audio",
+      "name_dir": "audio",
+      "extension": "aiff"
+    },
+    {
+      "type_media": "audio",
+      "name_dir": "audio",
+      "extension": "amr"
+    },
+    {
+      "type_media": "audio",
+      "name_dir": "audio",
+      "extension": "flac"
+    },
+    {
+      "type_media": "audio",
+      "name_dir": "audio",
+      "extension": "m3u8"
+    },
+    {
+      "type_media": "audio",
+      "name_dir": "audio",
+      "extension": "m4a"
+    },
+    {
+      "type_media": "audio",
+      "name_dir": "audio",
+      "extension": "m4b"
+    },
+    {
+      "type_media": "audio",
+      "name_dir": "audio",
+      "extension": "mid"
+    },
+    {
+      "type_media": "audio",
+      "name_dir": "audio",
+      "extension": "mod"
+    },
+    {
+      "type_media": "audio",
+      "name_dir": "audio",
+      "extension": "mp3"
+    },
+    {
+      "type_media": "audio",
+      "name_dir": "audio",
+      "extension": "mpa"
+    },
+    {
+      "type_media": "audio",
+      "name_dir": "audio",
+      "extension": "ogg"
+    },
+    {
+      "type_media": "audio",
+      "name_dir": "audio",
+      "extension": "ra"
+    },
+    {
+      "type_media": "audio",
+      "name_dir": "audio",
+      "extension": "ram"
+    },
+    {
+      "type_media": "audio",
+      "name_dir": "audio",
+      "extension": "wav"
+    },
+    {
+      "type_media": "audio",
+      "name_dir": "audio",
+      "extension": "wave"
+    },
+    {
+      "type_media": "audio",
+      "name_dir": "audio",
+      "extension": "wm"
+    },
+    {
+      "type_media": "audio",
+      "name_dir": "audio",
+      "extension": "wma"
     }
   ]
 }

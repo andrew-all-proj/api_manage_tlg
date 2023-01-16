@@ -1,0 +1,33 @@
+{
+  "model": "UserChannelModel",
+  "records": [
+    {
+      "id_channel": 1,
+      "id_user": 1
+    },
+    {
+      "id_channel": 2,
+      "id_user": 1
+    },
+    {
+      "id_channel": 3,
+      "id_user": 1
+    },
+    {
+      "id_channel": 4,
+      "id_user": 2
+    },
+    {
+      "id_channel": 5,
+      "id_user": 2
+    },
+    {
+      "id_channel": 6,
+      "id_user": 4
+    },
+    {
+      "id_channel": 7,
+      "id_user": 5
+    }
+  ]
+}

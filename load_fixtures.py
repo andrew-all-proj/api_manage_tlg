@@ -2,11 +2,11 @@ import click
 import json
 from api import db
 #from api.schemas.user import UserRequestSchema
-from api.models.channels_model import ChannelModel
+from api.models.channels_model import ChannelModel, UserChannelModel
 from api.models.events_model import EventModel
-from api.models.media_contents_model import TypeMediaModel
+from api.models.media_contents_model import TypeMediaModel, MediaContentModel
 from api.models.media_tags_model import TagModel
-from api.models.posts_model import PostsModel
+from api.models.posts_model import PostsModel, media
 from api.models.users_model import UserModel
 from config import BASE_DIR
 from sqlalchemy.exc import IntegrityError
@@ -22,8 +22,10 @@ def load_fixture(fixture):
         "EventModel": EventModel,
         "PostsModel": PostsModel,
         "TagModel": TagModel,
-        "TypeMediaModel": TypeMediaModel
-
+        "TypeMediaModel": TypeMediaModel,
+        "UserChannelModel": UserChannelModel,
+        "MediaContentModel": MediaContentModel,
+        "media": media
     }
     coun = 0
     with open(path_to_fixture, "r", encoding="UTF-8") as f:

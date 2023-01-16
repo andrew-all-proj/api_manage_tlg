@@ -2,8 +2,32 @@
   "model": "PostsModel",
   "records": [
     {
-      "text": "valera",
-      "id_user": 123456789
+      "text": "кот на крыше",
+      "id_user": 1
+    },
+    {
+      "text": "кот на крыше2",
+      "id_user": 1
+    },
+    {
+      "text": "кот на крыше3",
+      "id_user": 1
+    },
+    {
+      "text": "кот на крыше4",
+      "id_user": 1
+    },
+    {
+      "text": "кот спит1",
+      "id_user": 2
+    },
+    {
+      "text": "кот спит2",
+      "id_user": 2
+    },
+    {
+      "text": "кот спит3",
+      "id_user": 2
     }
   ]
 }

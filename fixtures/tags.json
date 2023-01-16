@@ -2,9 +2,28 @@
   "model": "TagModel",
   "records": [
     {
-      "id_tag": "valera",
-      "tag_name": 123456789,
-      "id_channel": "valera@mail.com",
+      "tag_name": "sleep",
+      "id_channel": 1
+    },
+    {
+      "tag_name": "sleep2",
+      "id_channel": 2
+    },
+    {
+      "tag_name": "еда",
+      "id_channel": 1
+    },
+    {
+      "tag_name": "еда2",
+      "id_channel": 2
+    },
+    {
+      "tag_name": "понедельник1",
+      "id_channel": 1
+    },
+    {
+      "tag_name": "понедельник2",
+      "id_channel": 2
     }
   ]
 }

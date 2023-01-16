@@ -1,8 +1,8 @@
-"""type media
+"""fixture
 
-Revision ID: 05a38d1f9ff0
+Revision ID: 39ce5d215fca
 Revises: 
-Create Date: 2023-01-10 19:41:28.426505
+Create Date: 2023-01-16 09:50:35.935269
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '05a38d1f9ff0'
+revision = '39ce5d215fca'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -27,8 +27,8 @@ def upgrade():
     )
     op.create_table('users',
     sa.Column('id_user', sa.Integer(), nullable=False),
-    sa.Column('name', sa.String(length=30), nullable=False),
-    sa.Column('id_telegram', sa.Integer(), nullable=False),
+    sa.Column('user_name', sa.String(length=30), nullable=False),
+    sa.Column('id_telegram', sa.Integer(), nullable=True),
     sa.Column('email', sa.String(length=50), nullable=False),
     sa.Column('password', sa.String(length=128), nullable=False),
     sa.Column('date_regestration', sa.DateTime(), nullable=False),
@@ -39,21 +39,30 @@ def upgrade():
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('id_telegram')
     )
-    op.create_table('chanels',
-    sa.Column('id_chanel', sa.Integer(), nullable=False),
-    sa.Column('name_chanel', sa.String(length=200), nullable=False),
-    sa.Column('link_chanel', sa.String(length=200), nullable=False),
+    op.create_table('auth_history',
+    sa.Column('id_auth_history', sa.Integer(), nullable=False),
+    sa.Column('id_user', sa.Integer(), nullable=False),
+    sa.Column('date_auth', sa.DateTime(), nullable=False),
+    sa.Column('from_is', sa.String(length=300), nullable=False),
+    sa.ForeignKeyConstraint(['id_user'], ['users.id_user'], ),
+    sa.PrimaryKeyConstraint('id_auth_history')
+    )
+    op.create_table('channels',
+    sa.Column('id_channel', sa.Integer(), nullable=False),
+    sa.Column('name_channel', sa.String(length=200), nullable=False),
+    sa.Column('link_channel', sa.String(length=200), nullable=False),
     sa.Column('id_telegram', sa.String(length=200), nullable=False),
     sa.Column('date_create', sa.DateTime(), nullable=False),
     sa.Column('data_update', sa.DateTime(), nullable=False),
     sa.Column('id_user_admin', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['id_user_admin'], ['users.id_user'], ),
-    sa.PrimaryKeyConstraint('id_chanel')
+    sa.PrimaryKeyConstraint('id_channel'),
+    sa.UniqueConstraint('id_telegram')
     )
     op.create_table('media_contents',
     sa.Column('id_media', sa.Integer(), nullable=False),
     sa.Column('id_type_media', sa.Integer(), nullable=False),
-    sa.Column('local_path', sa.String(length=250), nullable=False),
+    sa.Column('name_file', sa.String(length=250), nullable=False),
     sa.Column('description', sa.Text(), nullable=True),
     sa.Column('date_download', sa.DateTime(), nullable=False),
     sa.Column('last_time_used', sa.DateTime(), nullable=False),
@@ -67,7 +76,6 @@ def upgrade():
     sa.Column('id_post', sa.Integer(), nullable=False),
     sa.Column('text', sa.String(length=3000), nullable=True),
     sa.Column('id_user', sa.Integer(), nullable=False),
-    sa.Column('id_post_media', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['id_user'], ['users.id_user'], ),
     sa.PrimaryKeyConstraint('id_post')
     )
@@ -75,64 +83,57 @@ def upgrade():
     sa.Column('id_event', sa.Integer(), nullable=False),
     sa.Column('id_post', sa.Integer(), nullable=False),
     sa.Column('id_message', sa.Integer(), nullable=False),
-    sa.Column('id_chanel', sa.Integer(), nullable=False),
+    sa.Column('id_channel', sa.Integer(), nullable=False),
     sa.Column('date_start', sa.DateTime(), nullable=False),
     sa.Column('date_stop', sa.DateTime(), nullable=True),
     sa.Column('completed', sa.Boolean(), nullable=False),
-    sa.ForeignKeyConstraint(['id_chanel'], ['chanels.id_chanel'], ),
+    sa.ForeignKeyConstraint(['id_channel'], ['channels.id_channel'], ),
     sa.ForeignKeyConstraint(['id_post'], ['posts.id_post'], ),
     sa.PrimaryKeyConstraint('id_event')
     )
     op.create_table('posts_media',
-    sa.Column('id_post_media', sa.Integer(), nullable=False),
     sa.Column('id_post', sa.Integer(), nullable=False),
     sa.Column('id_media', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['id_media'], ['media_contents.id_media'], ),
     sa.ForeignKeyConstraint(['id_post'], ['posts.id_post'], ),
-    sa.PrimaryKeyConstraint('id_post_media')
+    sa.PrimaryKeyConstraint('id_post', 'id_media')
     )
     op.create_table('tags',
     sa.Column('id_tag', sa.Integer(), nullable=False),
-    sa.Column('name', sa.String(length=50), nullable=False),
-    sa.Column('id_chanel', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['id_chanel'], ['chanels.id_chanel'], ),
+    sa.Column('tag_name', sa.String(length=50), nullable=False),
+    sa.Column('id_channel', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['id_channel'], ['channels.id_channel'], ),
     sa.PrimaryKeyConstraint('id_tag')
     )
-    op.create_table('users_chanels',
-    sa.Column('id_user_chanel', sa.Integer(), nullable=False),
+    op.create_table('users_channels',
+    sa.Column('id_user_channel', sa.Integer(), nullable=False),
     sa.Column('id_user', sa.Integer(), nullable=False),
-    sa.Column('id_chanel', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['id_chanel'], ['chanels.id_chanel'], ),
+    sa.Column('id_channel', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['id_channel'], ['channels.id_channel'], ),
     sa.ForeignKeyConstraint(['id_user'], ['users.id_user'], ),
-    sa.PrimaryKeyConstraint('id_user_chanel')
+    sa.PrimaryKeyConstraint('id_user_channel')
     )
     op.create_table('media_tags',
-    sa.Column('id_media_tags', sa.Integer(), nullable=False),
     sa.Column('id_tag', sa.Integer(), nullable=False),
     sa.Column('id_media', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['id_media'], ['media_contents.id_media'], ),
     sa.ForeignKeyConstraint(['id_tag'], ['tags.id_tag'], ),
-    sa.PrimaryKeyConstraint('id_media_tags')
+    sa.PrimaryKeyConstraint('id_tag', 'id_media')
     )
-    op.drop_table('types')
     # ### end Alembic commands ###
 
 
 def downgrade():
     # ### commands auto generated by Alembic - please adjust! ###
-    op.create_table('types',
-    sa.Column('id', sa.INTEGER(), autoincrement=True, nullable=False),
-    sa.Column('name', sa.VARCHAR(length=30), autoincrement=False, nullable=False),
-    sa.PrimaryKeyConstraint('id', name='types_pkey')
-    )
     op.drop_table('media_tags')
-    op.drop_table('users_chanels')
+    op.drop_table('users_channels')
     op.drop_table('tags')
     op.drop_table('posts_media')
     op.drop_table('events')
     op.drop_table('posts')
     op.drop_table('media_contents')
-    op.drop_table('chanels')
+    op.drop_table('channels')
+    op.drop_table('auth_history')
     op.drop_table('users')
     op.drop_table('types_media')
     # ### end Alembic commands ###
