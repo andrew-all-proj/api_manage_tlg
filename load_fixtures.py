@@ -1,7 +1,5 @@
 import click
 import json
-from api import db
-#from api.schemas.user import UserRequestSchema
 from api.models.channels_model import ChannelModel, UserChannelModel
 from api.models.events_model import EventModel
 from api.models.media_contents_model import TypeMediaModel, MediaContentModel
@@ -25,7 +23,7 @@ def load_fixture(fixture):
         "TypeMediaModel": TypeMediaModel,
         "UserChannelModel": UserChannelModel,
         "MediaContentModel": MediaContentModel,
-        "media": media
+        "media": media #добавить метод для связывания
     }
     coun = 0
     with open(path_to_fixture, "r", encoding="UTF-8") as f:
@@ -35,6 +33,7 @@ def load_fixture(fixture):
         for record in data["records"]:
             model_object = model(**record)
             result = model_object.save()
+            print(result)
             if result:
                 coun= coun + 1
     print(f"add {coun}")

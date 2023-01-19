@@ -26,6 +26,7 @@ class ChannelModel(db.Model, ModelDbExt):
     id_telegram = db.Column(db.String(200), nullable=False, unique=True)
     date_create = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now)
     data_update = db.Column(db.DateTime, nullable=False, onupdate=datetime.datetime.now, default=datetime.datetime.now)
+    is_archive = db.Column(db.Boolean, nullable=False, default=False)
     id_user_admin = db.Column(db.Integer, db.ForeignKey("users.id_user"), nullable=False)
     users_channels = db.relationship(UserChannelModel)
     tags = db.relationship(TagModel)

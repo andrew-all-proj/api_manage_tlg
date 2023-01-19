@@ -1,8 +1,8 @@
-"""fixture
+"""is archive
 
-Revision ID: 39ce5d215fca
+Revision ID: c06e5d86279c
 Revises: 
-Create Date: 2023-01-16 09:50:35.935269
+Create Date: 2023-01-19 17:16:14.019333
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '39ce5d215fca'
+revision = 'c06e5d86279c'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -54,6 +54,7 @@ def upgrade():
     sa.Column('id_telegram', sa.String(length=200), nullable=False),
     sa.Column('date_create', sa.DateTime(), nullable=False),
     sa.Column('data_update', sa.DateTime(), nullable=False),
+    sa.Column('is_archive', sa.Boolean(), nullable=False),
     sa.Column('id_user_admin', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['id_user_admin'], ['users.id_user'], ),
     sa.PrimaryKeyConstraint('id_channel'),
@@ -67,7 +68,7 @@ def upgrade():
     sa.Column('date_download', sa.DateTime(), nullable=False),
     sa.Column('last_time_used', sa.DateTime(), nullable=False),
     sa.Column('id_user', sa.Integer(), nullable=False),
-    sa.Column('remove', sa.Boolean(), nullable=False),
+    sa.Column('is_archive', sa.Boolean(), nullable=False),
     sa.ForeignKeyConstraint(['id_type_media'], ['types_media.id_type_media'], ),
     sa.ForeignKeyConstraint(['id_user'], ['users.id_user'], ),
     sa.PrimaryKeyConstraint('id_media')
@@ -76,6 +77,7 @@ def upgrade():
     sa.Column('id_post', sa.Integer(), nullable=False),
     sa.Column('text', sa.String(length=3000), nullable=True),
     sa.Column('id_user', sa.Integer(), nullable=False),
+    sa.Column('is_archive', sa.Boolean(), nullable=False),
     sa.ForeignKeyConstraint(['id_user'], ['users.id_user'], ),
     sa.PrimaryKeyConstraint('id_post')
     )

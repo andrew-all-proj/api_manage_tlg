@@ -2,11 +2,34 @@
   "model": "EventModel",
   "records": [
     {
-      "id_post": "valera",
-      "id_message": 123456789,
-      "id_channel": "valera@mail.com",
-      "date_start": "valera",
-      "date_stop": "valera"
+      "id_post": 1,
+      "id_message": 0,
+      "id_channel": 1,
+      "date_start": "2023-01-16T09:53:31.536"
+    },
+    {
+      "id_post": 2,
+      "id_message": 0,
+      "id_channel": 1,
+      "date_start": "2023-01-16T09:53:31.536"
+    },
+    {
+      "id_post": 3,
+      "id_message": 0,
+      "id_channel": 1,
+      "date_start": "2023-01-16T09:53:31.536"
+    },
+    {
+      "id_post": 1,
+      "id_message": 0,
+      "id_channel": 2,
+      "date_start": "2023-01-16T09:53:31.536"
+    },
+    {
+      "id_post": 2,
+      "id_message": 0,
+      "id_channel": 2,
+      "date_start": "2023-01-16T09:53:31.536"
     }
   ]
 }

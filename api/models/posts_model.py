@@ -1,5 +1,4 @@
 from api import db
-from api.models.events_model import EventModel
 from api.models.media_contents_model import MediaContentModel
 from api.models.mixins import ModelDbExt
 
@@ -15,8 +14,9 @@ class PostsModel(db.Model, ModelDbExt):
     id_post = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(3000))
     id_user = db.Column(db.Integer, db.ForeignKey("users.id_user"), nullable=False)
+    is_archive = db.Column(db.Boolean, nullable=False, default=False)
     media = db.relationship(MediaContentModel, secondary=media, lazy='subquery')
-    event = db.relationship(EventModel)
+
 
     def __init__(self, id_user, text=None):
         self.text = text

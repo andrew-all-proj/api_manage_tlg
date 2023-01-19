@@ -8,3 +8,6 @@
 1. Активировать миграции: flask db init
 2. Создать миграцию: flask db migrate -m "comment"
 3. Применить миграции: flask db upgrade
+
+#Загрузка fixture
+1.  Ввести в консоль: python .\load_fixtures.py --fixture <name file fixture .json> 

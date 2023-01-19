@@ -1,6 +1,7 @@
 import datetime
 from api import db
 from api.models.mixins import ModelDbExt
+from api.models.posts_model import PostsModel
 
 
 class EventModel(db.Model, ModelDbExt):
@@ -13,6 +14,7 @@ class EventModel(db.Model, ModelDbExt):
     date_start = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now)
     date_stop = db.Column(db.DateTime)
     completed = db.Column(db.Boolean, nullable=False, default=False)
+    post = db.relationship(PostsModel, backref='posts', uselist=False, lazy='subquery')
 
     def __init__(self, id_post, id_channel, date_start, date_stop=None, id_message=0):
         self.id_post = id_post
