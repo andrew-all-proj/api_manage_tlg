@@ -11,8 +11,13 @@ def application():
     app.config.update({
         'SQLALCHEMY_DATABASE_URI': Config.TEST_DATABASE_URI
     })
-    db.create_all()
+    db.app = app
+    with app.app_context():
+        db.create_all()
+
     yield app
+
+    db.session.close()
     db.drop_all()
 
 

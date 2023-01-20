@@ -18,9 +18,9 @@ class TokenResource(MethodResource):
         if not user:
             return {"error": "Invalid login or password"}, 401
         if user.verify_password(password):
+            auth_token = auth_manager.auth_token(email, user.id_user)
             auth_history = AuthHistoryModel(id_user=user.id_user, from_is=request.headers["Host"])
             auth_history.save()
-            auth_token = auth_manager.auth_token(email, user.id_user)
             #refresh_token = auth_manager.refresh_token(user.id_user)  # добавить функцию!!!!
             return {f"auth_token": auth_token.signed}, 200
         return {"error": "Invalid login or password"}, 401
