@@ -28,7 +28,7 @@ class UserModel(db.Model, ModelDbExt):
     admin_channel = db.relationship(ChannelModel)
     auth = db.relationship(AuthHistoryModel)
 
-    def __init__(self, email, password, user_name, id_telegram):
+    def __init__(self, email, password, user_name, id_telegram=None):
         self.user_name = user_name
         self.id_telegram = id_telegram
         self.email = email

@@ -1,4 +1,5 @@
 from api import api, app, docs
+#from api.resources.auth_resource import TokenResource
 from api.resources.auth_resource import TokenResource
 from api.resources.channel_resource import ChannelsListResource
 from api.resources.events_resource import EventsListResource, EventsResource
@@ -15,7 +16,7 @@ from api.resources.user_resource import UsersListResource, UserResource
 # Update --> PUT
 # Delete --> DELETE
 api.add_resource(TokenResource,
-                 f'/{Config.VERSION}/auth/token')  # GET
+                 f'/{Config.VERSION}/auth')  # GET
 api.add_resource(UsersListResource,
                  f'/{Config.VERSION}/users')  # GET, POST
 api.add_resource(UserResource,
@@ -38,6 +39,7 @@ api.add_resource(MediaSetTagsResource,
                  f'/{Config.VERSION}/media/<int:id_media>/set_tags')  # POST
 
 docs.register(TokenResource)
+docs.register(UserResource)
 docs.register(UserResource)
 docs.register(UsersListResource)
 docs.register(ChannelsListResource)

@@ -18,3 +18,8 @@ class Config:
     TEST_DATABASE_URI = f"postgresql+psycopg2://{_USER_NAME_DB}:{_PASSWORD_DB}@localhost/db_unit_test"
     LANGUAGES = ['en', 'ru']
     VERSION = "v1"
+
+    JWT_ISSUER = "Flask_PyJWT"
+    JWT_AUTHTYPE = "HS256"
+    JWT_SECRET = "SuperSecretKey"
+

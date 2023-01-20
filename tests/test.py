@@ -56,3 +56,7 @@ class TestUser(TestCase):
         """
         db.session.remove()
         db.drop_all()
+
+
+def division():
+    return None

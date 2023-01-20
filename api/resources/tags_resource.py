@@ -1,5 +1,5 @@
 from flask_apispec.views import MethodResource
-from api import auth, g, db
+from api import g, db
 from api.models.media_contents_model import MediaContentModel
 from api.models.media_tags_model import TagModel
 from flask_apispec import marshal_with, use_kwargs, doc
@@ -12,7 +12,7 @@ from api.sсhemas.tag_schema import TagListSchema, TagSchema
 
 @doc(description='Api for tags', tags=['Tags'])
 class TagsListResource(MethodResource):
-    @auth.login_required
+    #@auth.login_required
     @doc(security=[{"basicAuth": []}])
     @marshal_with(TagListSchema(many=True), code=200)
     @doc(summary='Get all tags')
@@ -22,7 +22,7 @@ class TagsListResource(MethodResource):
         return tags, 200
 
 
-    @auth.login_required
+    #@auth.login_required
     @doc(description='create new tag')
     @marshal_with(TagSchema, code=201)
     @use_kwargs(TagListSchema, location='json')
@@ -35,7 +35,7 @@ class TagsListResource(MethodResource):
 
 @doc(description='Api for tags', tags=['Tags'])
 class MediaSetTagsResource(MethodResource):
-    @auth.login_required
+    #@auth.login_required
     @doc(security=[{"basicAuth": []}])
     @use_kwargs({"tags": fields.List(fields.Int())}, location='json')
     @marshal_with(MediaContentsSchema, code=200)

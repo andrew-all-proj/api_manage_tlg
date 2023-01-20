@@ -1,20 +1,26 @@
 from flask import Flask, g
+from flask_pyjwt import AuthManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
-from flask_httpauth import HTTPBasicAuth
 from flasgger import Swagger
 from apispec import APISpec
 from flask_apispec.extension import FlaskApiSpec
 from apispec.ext.marshmallow import MarshmallowPlugin
+
 from config import Config
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
 security_definitions = {
-    "basicAuth": {
-        "type": "basic"
+    "Bearer Auth": {
+                    "type": "apiKey",
+                    "in": "header",
+                    "name": "Authorization",
+                    "bearerFormat": "JWT",
+                    "description": "Enter: **'Bearer &lt;JWT&gt;'**, where JWT is the access token",
     }
 }
 
@@ -35,17 +41,8 @@ api = Api(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 ma = Marshmallow(app)
-auth = HTTPBasicAuth()
-#swager = Swagger(app)
+swager = Swagger(app)
 docs = FlaskApiSpec(app)
+auth_manager = AuthManager(app)
+auth_manager.init_app(app)
 
-@auth.verify_password
-def verify_password(user_name, username_or_token):
-    from api.models.users_model import UserModel
-    user = UserModel.verify_auth_token(username_or_token)
-    if not user:
-        user = UserModel.query.filter_by(user_name=user_name).first()
-        if not user or not user.verify_password(username_or_token):
-            return False
-    g.user = user
-    return True

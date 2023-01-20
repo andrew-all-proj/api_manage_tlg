@@ -1,21 +1,27 @@
 from flask_apispec.views import MethodResource
 from flask_restful import reqparse
-from api import db, app, auth, g, Config
+from api import db
 from api.models.users_model import UserModel
 from api.sсhemas.user_sсhema import UserSchema, UserRequestSchema
 from flask_apispec import  marshal_with, use_kwargs, doc
+from flask_pyjwt import require_token, current_token
 
 
 
 @doc(description='Api for user.', tags=['Users'])
 class UsersListResource(MethodResource):
-    @auth.login_required
+    #@auth.login_required
+    @require_token()
     @doc(security=[{"basicAuth": []}])
     @marshal_with(UserSchema(many=True), code=200)
     @doc(summary='Get all user delete after')
     @doc(description='Full: Get all User')
     def get(self):
-        #print(g.user.name)
+        print(current_token.token_type)
+        print(current_token.scope)
+        print(current_token.claims)
+        print(current_token.is_signed())
+        print(current_token.is_signed)
         users = UserModel.query.all()
         return users, 200
 
@@ -32,7 +38,7 @@ class UsersListResource(MethodResource):
 
 @doc(description='Api for user.', tags=['Users'])
 class UserResource(MethodResource):
-    @auth.login_required
+    #@auth.login_required
     @marshal_with(UserSchema, code=200)
     @doc(description='Full: Get User by id')
     @doc(summary='Get User by id')
