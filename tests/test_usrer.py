@@ -130,7 +130,7 @@ def test_delete_other_user(client, user, user2, headers_user):
 
 def test_delete_user_not_auth(client, user, headers_user):
     """
-        Тест на удаление пользователя не авторизованным
+        Тест на удаление пользователя не авторизованным пользователем
     """
     response = client.delete(f'/{Config.VERSION}/users/1')
     data = response.json
@@ -140,20 +140,86 @@ def test_delete_user_not_auth(client, user, headers_user):
     assert response.status_code == 401
 
 
-
 def test_user_edit(client, user, auth_headers):
+    """
+        Тест на изменение имени ползователя
+    """
     user_edited_data = {
-        "username": "new_name"
+        "user_name": "new_name",
+        "email": "email@test.com",
+        "password": "password",
+        "id_telegram": 18555555
     }
-    response = client.put(f'/users/{user.id}',
+    response = client.put(f'{Config.VERSION}/users/1',
                           json=user_edited_data,
                           headers=auth_headers)
     data = response.json
     assert response.status_code == 200
-    assert data["username"] == user_edited_data["username"]
+    assert data["user_name"] == user_edited_data["user_name"]
 
 
-@pytest.mark.skip(reason="test not implemented")
-def dtest_user_delete(client, user, auth_headers):
-    pass
-    # TODO: реализуйте тест на удаление пользователя и запустите его, убрав декоратор @pytest.mark.skip
+def test_user_edit_email(client, user, auth_headers):
+    """
+        Тест на изменение email ползователя
+    """
+    user_edited_data = {
+        "email": "email@test.com"
+    }
+    response = client.put(f'{Config.VERSION}/users/1',
+                          json=user_edited_data,
+                          headers=auth_headers)
+    data = response.json
+    new_data = UserModel.query.get(1)
+    assert response.status_code == 200
+    assert new_data.email == user_edited_data["email"]
+    assert data["email"] == user_edited_data["email"]
+
+
+def test_user_edit_email_novalid(client, user, auth_headers):
+    """
+        Тест на изменение email на не правильный формат
+    """
+    old_email = user.email
+    user_edited_data = {
+        "email": "emailtest.com"
+    }
+    response = client.put(f'{Config.VERSION}/users/1',
+                          json=user_edited_data,
+                          headers=auth_headers)
+    data = response.json
+    new_data = UserModel.query.get(1)
+    assert response.status_code == 200
+    assert new_data.email == old_email
+    assert user_edited_data["email"] != data["email"]
+
+
+def test_user_edit_other_user(client, user, auth_headers):
+    """
+        Тест изменение имени ползователя другого пользователя
+    """
+    old_email = user.email
+    user_edited_data = {
+        "user_name": "new_name"
+    }
+    response = client.put(f'{Config.VERSION}/users/2',
+                          json=user_edited_data,
+                          headers=auth_headers)
+    data = response.json
+    new_data = UserModel.query.get(1)
+    assert response.status_code == 400
+    assert new_data.email == old_email
+    assert 'user_name' not in data.keys()
+
+
+def test_user_edit_not_auth(client, user, auth_headers):
+    """
+        Тест на изменение имени ползователя не авторизованным пользователем
+    """
+    user_edited_data = {
+        "user_name": "new_name"
+    }
+    response = client.put(f'{Config.VERSION}/users/1',
+                          json=user_edited_data)
+    data = response.json
+    assert response.status_code == 401
+    assert 'user_name' not in data.keys()

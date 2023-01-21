@@ -20,10 +20,10 @@ class UserRequestSchema(ma.SQLAlchemySchema):
     class Meta:
         model = UserModel
 
-    user_name = ma.auto_field(required=True)
-    password = ma.auto_field(required=True)
-    email = ma.Email(required=True)
-    id_telegram = ma.auto_field()
+    user_name = ma.auto_field(required=False)
+    password = ma.auto_field(required=False)
+    email = ma.Email(required=False)
+    id_telegram = ma.auto_field(required=False)
 
 
 class UserLisrSchema(ma.SQLAlchemySchema):
@@ -32,5 +32,6 @@ class UserLisrSchema(ma.SQLAlchemySchema):
 
     id_user = ma.auto_field(required=True)
     user_name = ma.auto_field(required=True)
+    is_archive = ma.auto_field(required=True)
 
 

@@ -28,8 +28,7 @@ class UsersListResource(MethodResource):
         if user:
             return {"error": "email is exist"}, 400
         user = UserModel(**kwargs)
-        db.session.add(user)
-        db.session.commit()
+        user.save()
         return user, 201
 
 @doc(description='Api for user.', tags=['Users'])
@@ -64,12 +63,26 @@ class UserResource(MethodResource):
 
 
     @require_token()
+    @doc(security=[{"bearerAuth": []}])
     @marshal_with(UserSchema, code=200)
-    @use_kwargs(UserSchema, location='json')
-    @doc(description='Full: Change data user with filters')
-    @doc(summary='Change data user with filters')
-    def put(self, user_id):
-        user = UserModel.query.get(user_id)
+    @use_kwargs(UserRequestSchema, location='json')
+    @doc(description='Full: Change data user')
+    @doc(summary='Change data user')
+    def put(self, user_id, **kwargs):
+        user = get_object_or_404(UserModel, user_id)
+        if not user:
+            return {"error": "id user is not exist"}, 400
+        if user.is_archive:
+            return {"error": "user in archive"}, 400
+        if user.id_user != current_token.scope:
+            return {"error": "You can change only own profile"}, 400
+        user.user_name = kwargs.get('user_name') or user.user_name
+        user.id_telegram = kwargs.get('id_telegram') or user.id_telegram
+        user.email = kwargs.get('email') or user.email
+        if kwargs.get('password'):
+            user.hash_password(kwargs.get('password'))
+        if not user.save():
+            return {"error": "update data base"}, 400
         return user, 200
 
 
