@@ -8,8 +8,9 @@ class ModelDbExt:
             db.session.add(self)
             db.session.commit()
             return True
-        except IntegrityError:  # Обработка ошибки "создание пользователя с НЕ уникальным именем"
+        except Exception as ex: #IntegrityError:  # Обработка ошибки "создание пользователя с НЕ уникальным именем"
             db.session.rollback()
+            print(ex)
             return False
 
 """ def delete(self):

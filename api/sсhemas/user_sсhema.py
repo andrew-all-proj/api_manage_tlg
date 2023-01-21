@@ -8,8 +8,11 @@ from api.models.users_model import UserModel
 class UserSchema(ma.SQLAlchemySchema):
     class Meta:
         model = UserModel
-        fields = ('id_user', 'user_name', "email", "id_telegram")
-        #exclude = ['id_user', 'name'] исключить
+
+    id_user = ma.auto_field(required=True)
+    user_name = ma.auto_field(required=True)
+    email = ma.Email(required=True)
+    id_telegram = ma.auto_field(required=True)
 
 
 # Десериализация запроса(request)
@@ -17,9 +20,17 @@ class UserRequestSchema(ma.SQLAlchemySchema):
     class Meta:
         model = UserModel
 
-    user_name = ma.Str(required=True)
-    password = ma.Str(required=True)
-    email = ma.Str(required=True)
-    id_telegram = ma.Int(required=True)
+    user_name = ma.auto_field(required=True)
+    password = ma.auto_field(required=True)
+    email = ma.Email(required=True)
+    id_telegram = ma.auto_field()
+
+
+class UserLisrSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = UserModel
+
+    id_user = ma.auto_field(required=True)
+    user_name = ma.auto_field(required=True)
 
 

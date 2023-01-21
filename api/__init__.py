@@ -1,4 +1,4 @@
-from flask import Flask, g
+from flask import Flask, g, jsonify
 from flask_pyjwt import AuthManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
@@ -15,7 +15,7 @@ from config import Config
 app = Flask(__name__)
 app.config.from_object(Config)
 security_definitions = {
-    "Bearer Auth": {
+    "bearerAuth": {
                     "type": "apiKey",
                     "in": "header",
                     "name": "Authorization",
@@ -46,3 +46,8 @@ docs = FlaskApiSpec(app)
 auth_manager = AuthManager(app)
 auth_manager.init_app(app)
 
+@app.errorhandler(422)
+def validation_error(err):
+    """Handles 422 errors"""
+    messages = err.data.get('messages').get('json')
+    return jsonify(messages)

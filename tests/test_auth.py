@@ -8,6 +8,9 @@ from tests.init_test import client, user_admin, application, auth_headers
 
 
 def test_get_jwt_token_auth(client, user_admin):
+    """
+        Тест на получение JWT токена и декодирования токена
+    """
     user = user_admin
     id_user = user.id_user
     email = user.email
@@ -26,7 +29,9 @@ def test_get_jwt_token_auth(client, user_admin):
 
 
 def test_get_jwt_token_auth_negative(client, user_admin):
-    user = user_admin
+    """
+        Негативный тест на декодирование токена
+    """
     user_data_req = {
         "email": "admin@mail.com",
         'password': 'admin'
@@ -42,8 +47,9 @@ def test_get_jwt_token_auth_negative(client, user_admin):
 
 
 def test_write_auth_history(client, user_admin):
-    user = user_admin
-
+    """
+        Тест записи данных в таблицу с историей при аутификации
+    """
     user_data_req = {
         "email": "admin@mail.com",
         'password': 'admin'

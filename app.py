@@ -16,11 +16,13 @@ from api.resources.user_resource import UsersListResource, UserResource
 # Update --> PUT
 # Delete --> DELETE
 api.add_resource(TokenResource,
-                 f'/{Config.VERSION}/auth')  # GET
+                 f'/{Config.VERSION}/auth')  # POST
+
 api.add_resource(UsersListResource,
                  f'/{Config.VERSION}/users')  # GET, POST
 api.add_resource(UserResource,
-                 f'/{Config.VERSION}/users/<int:user_id>')  # GET, POST
+                 f'/{Config.VERSION}/users/<int:user_id>')  # GET, DELETE, PUT
+
 api.add_resource(ChannelsListResource,
                  f'/{Config.VERSION}/channels')  # GET, POST
 api.add_resource(MediaListResource,
@@ -40,8 +42,8 @@ api.add_resource(MediaSetTagsResource,
 
 docs.register(TokenResource)
 docs.register(UserResource)
-docs.register(UserResource)
 docs.register(UsersListResource)
+
 docs.register(ChannelsListResource)
 docs.register(MediaListResource)
 docs.register(PostsListResource)

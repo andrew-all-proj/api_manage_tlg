@@ -28,10 +28,11 @@ class UserModel(db.Model, ModelDbExt):
     admin_channel = db.relationship(ChannelModel)
     auth = db.relationship(AuthHistoryModel)
 
-    def __init__(self, email, password, user_name, id_telegram=None):
+    def __init__(self, email, password, user_name, id_telegram=None, is_archive=False):
         self.user_name = user_name
         self.id_telegram = id_telegram
         self.email = email
+        self.is_archive = is_archive
         self.hash_password(password)
 
     def hash_password(self, password):
@@ -40,10 +41,14 @@ class UserModel(db.Model, ModelDbExt):
     def verify_password(self, password):
         return pwd_context.verify(password, self.password)
 
+    def user_to_archive(self):
+        self.is_archive = True
+
     def generate_auth_token(self, expiration=600):
         s = Serialier(Config.SECRET_KEY)
         return s.dumps({'id_user': self.id_user})
             
+
 
     @staticmethod
     def verify_auth_token(token):

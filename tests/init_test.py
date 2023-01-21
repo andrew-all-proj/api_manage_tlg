@@ -1,4 +1,4 @@
-from api import db
+from api import db, auth_manager
 from app import app
 from config import Config
 from base64 import b64encode
@@ -34,9 +34,9 @@ def user_admin():
 
 @pytest.fixture()
 def auth_headers(user_admin):
-    user_data = {"email": "admin@mail.com", "password": "admin"}
+    user_data = {"email": "admin@mail.com", "password": "admin", "id_user": 1}
+    auth_token = auth_manager.auth_token(user_data['email'], user_data['id_user'])
     headers = {
-        'Authorization': 'Basic ' + b64encode(
-            f"{user_data['user_name']}:{user_data['password']}".encode('ascii')).decode('utf-8')
+        'Authorization': 'Bearer ' + auth_token.signed
     }
     return headers
