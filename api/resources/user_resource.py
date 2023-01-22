@@ -14,13 +14,14 @@ class UsersListResource(MethodResource):
     @require_token()
     @doc(security=[{"bearerAuth": []}])
     @marshal_with(UserLisrSchema(many=True), code=200)
-    @doc(summary='Get all user delete after')
+    @doc(summary='Get all user')
     @doc(description='Full: Get all User')
     def get(self):
         users = UserModel.query.all()
         return users, 200
 
     @doc(description='create new user')
+    @doc(summary='create new user')
     @marshal_with(UserSchema, code=201)
     @use_kwargs(UserRequestSchema, location='json')
     def post(self, **kwargs):
@@ -66,8 +67,8 @@ class UserResource(MethodResource):
     @doc(security=[{"bearerAuth": []}])
     @marshal_with(UserSchema, code=200)
     @use_kwargs(UserRequestSchema, location='json')
-    @doc(description='Full: Change data user')
-    @doc(summary='Change data user')
+    @doc(description='Full: Change data user by id')
+    @doc(summary='Change data user by id')
     def put(self, user_id, **kwargs):
         user = get_object_or_404(UserModel, user_id)
         if not user:

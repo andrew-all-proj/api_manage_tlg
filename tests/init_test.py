@@ -40,3 +40,32 @@ def auth_headers(user_admin):
         'Authorization': 'Bearer ' + auth_token.signed
     }
     return headers
+
+@pytest.fixture()
+def user():
+    """
+        Фикстура по созданию в бд тестового пользователя
+    """
+    user_data = {"user_name": "testuser", "password": "1234", "email": "test@mail.com"}
+    user = UserModel(**user_data)
+    user.save()
+    return user
+
+@pytest.fixture()
+def user2():
+    """
+        Фикстура по созданию в бд тестого пользователя
+    """
+    user_data = {"user_name": "jonh", "password": "1234", "email": "jonh@mail.com"}
+    user = UserModel(**user_data)
+    user.save()
+    return user
+
+@pytest.fixture()
+def headers_user(user):
+    id_user = user.id_user
+    email = user.email
+    auth_token = auth_manager.auth_token(email, id_user)
+    return  {
+        'Authorization': 'Bearer ' + auth_token.signed
+    }

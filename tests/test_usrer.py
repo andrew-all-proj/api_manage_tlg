@@ -2,37 +2,9 @@ import pytest
 
 from api import auth_manager
 from api.models.users_model import UserModel
-from tests.init_test import client, application, auth_headers, user_admin
+from tests.init_test import client, application, auth_headers, user_admin, headers_user, user, user2
 from config import Config
 
-@pytest.fixture()
-def user():
-    """
-        Фикстура по созданию в бд тестого пользователя
-    """
-    user_data = {"user_name": "testuser", "password": "1234", "email": "test@mail.com"}
-    user = UserModel(**user_data)
-    user.save()
-    return user
-
-@pytest.fixture()
-def user2():
-    """
-        Фикстура по созданию в бд тестого пользователя
-    """
-    user_data = {"user_name": "jonh", "password": "1234", "email": "jonh@mail.com"}
-    user = UserModel(**user_data)
-    user.save()
-    return user
-
-@pytest.fixture()
-def headers_user(user):
-    id_user = user.id_user
-    email = user.email
-    auth_token = auth_manager.auth_token(email, id_user)
-    return  {
-        'Authorization': 'Bearer ' + auth_token.signed
-    }
 
 def test_user_get_by_id(client, headers_user, user):
     """

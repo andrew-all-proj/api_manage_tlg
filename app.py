@@ -1,7 +1,7 @@
 from api import api, app, docs
 #from api.resources.auth_resource import TokenResource
 from api.resources.auth_resource import TokenResource
-from api.resources.channel_resource import ChannelsListResource
+from api.resources.channel_resource import ChannelsListResource, ChannelsResource
 from api.resources.events_resource import EventsListResource, EventsResource
 from api.resources.media_contents_resource import MediaListResource
 from api.resources.posts_resource import PostsListResource, AddMediaToPostResource
@@ -25,6 +25,9 @@ api.add_resource(UserResource,
 
 api.add_resource(ChannelsListResource,
                  f'/{Config.VERSION}/channels')  # GET, POST
+api.add_resource(ChannelsResource,
+                 f'/{Config.VERSION}/channels/<int:user_id>')  # GET, DELETE, PUT
+
 api.add_resource(MediaListResource,
                  f'/{Config.VERSION}/media')  # GET, POST
 api.add_resource(PostsListResource,
@@ -45,6 +48,8 @@ docs.register(UserResource)
 docs.register(UsersListResource)
 
 docs.register(ChannelsListResource)
+docs.register(ChannelsResource)
+
 docs.register(MediaListResource)
 docs.register(PostsListResource)
 docs.register(AddMediaToPostResource)
