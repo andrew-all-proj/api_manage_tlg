@@ -15,7 +15,7 @@ class UserModel(db.Model, ModelDbExt):
 
     id_user = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String(30), nullable=False)
-    id_telegram = db.Column(db.Integer, unique=True)
+    id_telegram = db.Column(db.String(50), unique=True)
     email = db.Column(db.String(50), unique=True, nullable=False, default=False)
     password = db.Column(db.String(128), nullable=False)
     date_regestration = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now)

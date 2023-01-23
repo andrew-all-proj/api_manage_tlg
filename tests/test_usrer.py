@@ -51,7 +51,7 @@ def test_user_creation(client):
     """
     user_data = {
       "email": "valera@example.com",
-      "id_telegram": 1234567,
+      "id_telegram": "1234567",
       "password": "valera",
       "user_name": "valera"
     }
@@ -67,7 +67,7 @@ def test_user_creation_already_exist(client, user):
     """
         Тест на создание пользователя с существующим email
     """
-    user_data = {"user_name": "testuser", "password": "1234", "email": "test@mail.com"}
+    user_data = {"user_name": "testuser", "password": "1234569", "email": "test@mail.com"}
     response = client.post(f'/{Config.VERSION}/users',
                            json=user_data,
                            content_type='application/json')
@@ -120,7 +120,7 @@ def test_user_edit(client, user, auth_headers):
         "user_name": "new_name",
         "email": "email@test.com",
         "password": "password",
-        "id_telegram": 18555555
+        "id_telegram": "18555555"
     }
     response = client.put(f'{Config.VERSION}/users/1',
                           json=user_edited_data,
@@ -160,7 +160,7 @@ def test_user_edit_email_novalid(client, user, auth_headers):
                           headers=auth_headers)
     data = response.json
     new_data = UserModel.query.get(1)
-    assert response.status_code == 200
+    assert response.status_code == 422
     assert new_data.email == old_email
     assert user_edited_data["email"] != data["email"]
 

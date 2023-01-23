@@ -1,9 +1,10 @@
 from flask_apispec.views import MethodResource
+from webargs import fields
 from flask_pyjwt import require_token, current_token
+from sqlalchemy import and_
 
-from api import g
 from api.models.channels_model import ChannelModel, UserChannelModel
-from api.sсhemas.channel_schema import ChannelSchema, ChannelRequestSchema
+from api.sсhemas.channel_schema import ChannelSchema, ChannelRequestSchema, ChannelChangeSchema
 from flask_apispec import marshal_with, use_kwargs, doc
 
 from helpers.shortscuts import get_object_or_404
@@ -18,9 +19,9 @@ class ChannelsListResource(MethodResource):
     @doc(description='Full: Get all channel')
     def get(self):
         channels = ChannelModel.query.join(UserChannelModel, ChannelModel.id_channel == UserChannelModel.id_channel). \
-            filter(UserChannelModel.id_user == current_token.scope).all()
+            filter(and_(UserChannelModel.id_user == current_token.scope,
+                        ChannelModel.is_archive == False)).all()
         return channels, 200
-
 
     @require_token()
     @doc(security=[{"bearerAuth": []}])
@@ -38,15 +39,90 @@ class ChannelsListResource(MethodResource):
         return channel, 201
 
 
-
 @doc(description='Api for channel', tags=['Channels'])
 class ChannelsResource(MethodResource):
     @require_token()
     @doc(security=[{"bearerAuth": []}])
-    @marshal_with(ChannelSchema(many=True), code=200)
+    @marshal_with(ChannelSchema(), code=200)
+    @doc(summary='Get channel by id')
+    @doc(description='Full: Get channel by id')
+    def get(self, id_channel):
+        channel = ChannelModel.query.join(UserChannelModel, ChannelModel.id_channel == UserChannelModel.id_channel). \
+            filter(and_(UserChannelModel.id_user == current_token.scope,
+                        ChannelModel.id_channel == id_channel,
+                        ChannelModel.is_archive == False)).first()
+        return channel, 200
+
+    @require_token()
+    @doc(security=[{"bearerAuth": []}])
+    @marshal_with(ChannelSchema(), code=200)
     @doc(summary='Get all channels')
     @doc(description='Full: Get all channel')
-    def get(self):
-        channels = ChannelModel.query.join(UserChannelModel, ChannelModel.id_channel == UserChannelModel.id_channel). \
-            filter(UserChannelModel.id_user == current_token.scope).all()
-        return channels, 200
+    def delete(self, id_channel):
+        channel = ChannelModel.query.join(UserChannelModel, ChannelModel.id_channel == UserChannelModel.id_channel). \
+            filter(and_(UserChannelModel.id_user == current_token.scope,
+                        ChannelModel.id_channel == id_channel,
+                        ChannelModel.is_archive == False)).first()
+        if not channel:
+            return {"error": "channel not found"}, 404
+        channel.channel_to_archive()
+        channel.save()
+        return {}, 200
+
+    @require_token()
+    @doc(security=[{"bearerAuth": []}])
+    @marshal_with(ChannelSchema, code=200)
+    @use_kwargs(ChannelChangeSchema, location='json')
+    @doc(description='Full: Change data chanel by id')
+    @doc(summary='Change data chanel by id')
+    def put(self, id_channel, **kwargs):
+        channel = ChannelModel.query.join(UserChannelModel, ChannelModel.id_channel == UserChannelModel.id_channel). \
+            filter(and_(UserChannelModel.id_user == current_token.scope,
+                        ChannelModel.id_channel == id_channel,
+                        ChannelModel.is_archive == False)).first()
+        if not channel:
+            return {"error": "channel not found"}, 404
+        channel.name_channel = kwargs.get('name_channel') or channel.name_channel
+        channel.link_channel = kwargs.get('link_channel') or channel.link_channel
+        channel.id_telegram = kwargs.get('id_telegram') or channel.id_telegram
+        if not channel.save():
+            return {"error": "update data base"}, 400
+        return channel, 200
+
+
+@doc(description='Api for channel', tags=['Channels'])
+class ChannelsSetUserResource(MethodResource):
+    @require_token()
+    @doc(security=[{"bearerAuth": []}])
+    @marshal_with(ChannelSchema(), code=200)
+    @doc(summary='Set channel for users')
+    @doc(description='Full: Set channel for users')
+    def put(self, id_channel, id_user):
+        channel = ChannelModel.query.join(UserChannelModel, ChannelModel.id_channel == UserChannelModel.id_channel). \
+            filter(and_(ChannelModel.id_user_admin == current_token.scope,  # admin chanel
+                        ChannelModel.id_channel == id_channel,  # select chanel is exist
+                        ChannelModel.is_archive == False)).first()  # is not archive
+        if not channel:
+            return {"error": "channel not found"}, 404
+        user_channel = UserChannelModel(id_user=id_user, id_channel=id_channel)
+        if not user_channel.save():
+            return {"error": "update data base"}, 400
+        return channel, 200
+
+    @require_token()
+    @doc(security=[{"bearerAuth": []}])
+    @marshal_with(ChannelSchema(), code=200)
+    @doc(summary='Unset channel for users')
+    @doc(description='Full: Unset channel for users')
+    def delete(self, id_channel, id_user):
+        channel = ChannelModel.query.join(UserChannelModel, ChannelModel.id_channel == UserChannelModel.id_channel). \
+            filter(and_(ChannelModel.id_user_admin == current_token.scope,  # admin chanel
+                        ChannelModel.id_channel == id_channel,  # select chanel is exist
+                        ChannelModel.is_archive == False)).first()  # is not archive
+        if not channel:
+            return {"error": "channel not found"}, 404
+        user_channel = UserChannelModel.query.filter(and_(UserChannelModel.id_channel == id_channel,
+                                                          UserChannelModel.id_user == id_user)).first()
+        if not user_channel or not user_channel.delete():
+            return {"error": "update data base"}, 400
+        return {}, 200

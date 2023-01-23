@@ -13,6 +13,11 @@ class ModelDbExt:
             print(ex)
             return False
 
-""" def delete(self):
-        db.session.delete(self)
-        db.session.commit()"""
+    def delete(self):
+        try:
+            db.session.delete(self)
+            db.session.commit()
+            return True
+        except Exception as ex:
+            print(ex)
+            return False

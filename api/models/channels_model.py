@@ -10,6 +10,8 @@ class UserChannelModel(db.Model, ModelDbExt):
     id_user_channel = db.Column(db.Integer, primary_key=True)
     id_user = db.Column(db.Integer, db.ForeignKey("users.id_user"), nullable=False)
     id_channel = db.Column(db.Integer, db.ForeignKey("channels.id_channel"), nullable=False)
+    __table_args__ = (db.UniqueConstraint('id_user', 'id_channel', name='_user_channel_uc'),
+                      )
 
     def __init__(self, id_channel, id_user):
         self.id_channel = id_channel
@@ -37,3 +39,8 @@ class ChannelModel(db.Model, ModelDbExt):
         self.link_channel = link_channel
         self.id_telegram = id_telegram
         self.id_user_admin = id_user_admin
+
+    def channel_to_archive(self):
+        self.is_archive = True
+
+

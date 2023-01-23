@@ -50,4 +50,4 @@ auth_manager.init_app(app)
 def validation_error(err):
     """Handles 422 errors"""
     messages = err.data.get('messages').get('json')
-    return jsonify(messages)
+    return jsonify(messages), 422
