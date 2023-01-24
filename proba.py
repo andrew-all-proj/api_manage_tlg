@@ -1,4 +1,3 @@
-def division(a, b):
-    return a / b
+str = "image/png"
 
-print(division(10, 5))
+print(str.split("/")[1])

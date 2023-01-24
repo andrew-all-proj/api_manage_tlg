@@ -23,3 +23,5 @@ class Config:
     JWT_AUTHTYPE = "HS256"
     JWT_SECRET = "SuperSecretKey"
 
+    BASE_DIR = BASE_DIR
+

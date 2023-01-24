@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from api import db, auth_manager
 from app import app
 from config import Config
@@ -5,6 +7,7 @@ from base64 import b64encode
 from api.models.users_model import UserModel
 import pytest
 
+BASE_DIR = Path(__file__).parent
 
 @pytest.fixture()
 def application():
@@ -69,3 +72,10 @@ def headers_user(user):
     return  {
         'Authorization': 'Bearer ' + auth_token.signed
     }
+file_name = "image.jpeg"
+
+
+@pytest.fixture()
+def file_name():
+    return str(BASE_DIR) + "/image.jpeg"
+

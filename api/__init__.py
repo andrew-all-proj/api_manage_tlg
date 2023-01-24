@@ -10,6 +10,7 @@ from flask_apispec.extension import FlaskApiSpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 
 from config import Config
+from marshmallow import fields
 
 
 app = Flask(__name__)
@@ -45,6 +46,8 @@ swager = Swagger(app)
 docs = FlaskApiSpec(app)
 auth_manager = AuthManager(app)
 auth_manager.init_app(app)
+
+
 
 @app.errorhandler(422)
 def validation_error(err):

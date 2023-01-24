@@ -2,7 +2,7 @@ from api import ma
 from api.models.media_contents_model import MediaContentModel, TypeMediaModel
 from api.sсhemas.tag_schema import TagSchema
 from api.sсhemas.type_media_schema import TypeMediaSchema
-
+from marshmallow import fields
 #       schema        flask-restful
 # object ------>  dict ----------> json
 
@@ -30,4 +30,7 @@ class MediaContentsRequestSchema(ma.SQLAlchemySchema):
     name_file = ma.Str(required=True)
 
 
+class MediaContentsPostSchema(ma.SQLAlchemySchema):
 
+
+    image = ma.Str(required=True)

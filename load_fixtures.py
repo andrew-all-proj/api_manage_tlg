@@ -33,7 +33,6 @@ def load_fixture(fixture):
         for record in data["records"]:
             model_object = model(**record)
             result = model_object.save()
-            print(result)
             if result:
                 coun= coun + 1
     print(f"add {coun}")
