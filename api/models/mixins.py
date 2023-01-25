@@ -21,3 +21,6 @@ class ModelDbExt:
         except Exception as ex:
             print(ex)
             return False
+
+    def obj_to_archive(self):
+        self.is_archive = True

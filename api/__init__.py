@@ -1,4 +1,4 @@
-from flask import Flask, g, jsonify
+from flask import Flask, g, jsonify, send_file
 from flask_pyjwt import AuthManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
@@ -8,20 +8,20 @@ from flasgger import Swagger
 from apispec import APISpec
 from flask_apispec.extension import FlaskApiSpec
 from apispec.ext.marshmallow import MarshmallowPlugin
+from werkzeug.security import safe_join
 
 from config import Config
 from marshmallow import fields
-
 
 app = Flask(__name__)
 app.config.from_object(Config)
 security_definitions = {
     "bearerAuth": {
-                    "type": "apiKey",
-                    "in": "header",
-                    "name": "Authorization",
-                    "bearerFormat": "JWT",
-                    "description": "Enter: **'Bearer &lt;JWT&gt;'**, where JWT is the access token",
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "bearerFormat": "JWT",
+        "description": "Enter: **'Bearer &lt;JWT&gt;'**, where JWT is the access token",
     }
 }
 
@@ -48,9 +48,11 @@ auth_manager = AuthManager(app)
 auth_manager.init_app(app)
 
 
-
 @app.errorhandler(422)
 def validation_error(err):
     """Handles 422 errors"""
     messages = err.data.get('messages').get('json')
     return jsonify(messages), 422
+
+
+

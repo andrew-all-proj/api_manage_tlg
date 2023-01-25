@@ -2,11 +2,13 @@ from datetime import datetime
 import os
 
 import werkzeug
-from flask import request, jsonify
+from flask import request, jsonify, send_file
 from flask_apispec.views import MethodResource
 from flask_pyjwt import require_token, current_token
 from flask_restful import reqparse
+from sqlalchemy import and_
 from webargs import fields
+from werkzeug.security import safe_join
 from werkzeug.utils import secure_filename
 
 from api import g, app
@@ -32,7 +34,8 @@ class MediaListResource(MethodResource):
             page = kwargs["page"]
         if kwargs.get("per_page"):
             per_page = kwargs["per_page"]
-        media = MediaContentModel.query.filter(MediaContentModel.id_user == current_token.scope).paginate(page, per_page, error_out=False).items
+        media = MediaContentModel.query.filter(MediaContentModel.id_user == current_token.scope).\
+            paginate(page, per_page, error_out=False).items
         return media, 200
 
 
@@ -45,7 +48,6 @@ class MediaListResource(MethodResource):
         file = kwarg.get('file')
         if not file:
             return {"error": "Not file"}, 400
-        print(file)
         type_media = TypeMediaModel.query.filter_by(extension=file.content_type.split("/")[1]).first()
         if not type_media:
             return {"error": str(file.content_type.split("/")[1])}, 400
@@ -54,7 +56,7 @@ class MediaListResource(MethodResource):
         try:
             file.save(f"{Config.BASE_DIR}/{current_token.scope}/{type_media.name_dir}/{gen_name}")  # file/1/images/12333.jpg
         except FileNotFoundError:
-            os.makedirs(f"{Config.BASE_DIR}/{current_token.scope}/{type_media.name_dir}")
+            os.makedirs(f"{Config.BASE_DIR}/{current_token.scope}/{type_media.name_dir}")   #create dir
             file.save(f"{Config.BASE_DIR}/{current_token.scope}/{type_media.name_dir}/{gen_name}")
         except Exception:
             return {"error": "error save"}, 400
@@ -63,3 +65,52 @@ class MediaListResource(MethodResource):
             os.remove(f"{Config.BASE_DIR}/{current_token.scope}/{type_media.name_dir}/{gen_name}")
             return {"error": "error save"}, 400
         return media, 201
+
+
+@doc(description='Api for media', tags=['Media'])
+class MediaResource(MethodResource):
+    @require_token()
+    @doc(security=[{"bearerAuth": []}])
+    @marshal_with(MediaContentsSchema, code=200)
+    @doc(summary='Get media by id')
+    @doc(description='Full: Get media by id')
+    def get(self, id_media):
+        media = MediaContentModel.query.filter(and_(MediaContentModel.id_user == current_token.scope,
+                                                    MediaContentModel.id_media == id_media,
+                                                    MediaContentModel.is_archive == False)).first()
+        return media, 200
+
+    @require_token()
+    @doc(security=[{"bearerAuth": []}])
+    @marshal_with(MediaContentsSchema, code=200)
+    @doc(summary='Get media by id')
+    @doc(description='Full: Get media by id')
+    def delete(self, id_media):
+        media = MediaContentModel.query.filter(and_(MediaContentModel.id_user == current_token.scope,
+                                                    MediaContentModel.id_media == id_media,
+                                                    MediaContentModel.is_archive == False)).first()
+        if not media:
+            return {"error": "channel not found"}, 404
+        media.obj_to_archive()
+        media.save()
+        return {}, 200
+
+
+@doc(description='Api for media', tags=['Media'])
+class MediaDownloadResource(MethodResource):
+    @require_token()
+    @doc(security=[{"bearerAuth": []}])
+    @doc(summary='Download media by id')
+    @doc(description='Full: Download media by id')
+    def get(self, id_media):
+        media = MediaContentModel.query.filter(and_(MediaContentModel.id_user == current_token.scope,
+                                                    MediaContentModel.id_media == id_media,
+                                                    MediaContentModel.is_archive == False)).first()
+        if not media:
+            return {"error": "Not file"}, 404
+        type_media = TypeMediaModel.query.filter_by(id_type_media=media.id_type_media).first()
+        return send_file(
+            path_or_file=f"{Config.BASE_DIR}/{current_token.scope}/{type_media.name_dir}/{media.name_file}",
+            mimetype="application/octet-stream",
+            as_attachment=False,
+        )

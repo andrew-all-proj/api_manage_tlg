@@ -42,3 +42,19 @@ def test_media_get_all_paginator_page(client, headers_user, media):
     response = client.get(f'{Config.VERSION}/media/?per_page=2&page=2', headers=headers_user)
     assert len(response.json) == 2
     assert response.status_code == 200
+
+
+def test_media_get(client, headers_user, media):
+    """
+        Тест на получение списка медиа через get запрос авторизованного пользователя  по id
+    """
+    response = client.get(f'{Config.VERSION}/media/1', headers=headers_user)
+    assert response.status_code == 200
+
+
+def test_media_get_no_auth(client, headers_user, media):
+    """
+        Тест на получение списка медиа через get запрос авторизованного пользователя  по id
+    """
+    response = client.get(f'{Config.VERSION}/media/1')
+    assert response.status_code == 401

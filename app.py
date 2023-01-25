@@ -3,7 +3,7 @@ from api import api, app, docs
 from api.resources.auth_resource import TokenResource
 from api.resources.channel_resource import ChannelsListResource, ChannelsResource, ChannelsSetUserResource
 from api.resources.events_resource import EventsListResource, EventsResource
-from api.resources.media_contents_resource import MediaListResource
+from api.resources.media_contents_resource import MediaListResource, MediaResource, MediaDownloadResource
 from api.resources.posts_resource import PostsListResource, AddMediaToPostResource
 from api.resources.tags_resource import TagsListResource, MediaSetTagsResource
 from config import Config
@@ -32,10 +32,13 @@ api.add_resource(ChannelsSetUserResource,
 
 api.add_resource(MediaListResource,
                  f'/{Config.VERSION}/media/')  # GET/filter, POST
-
+api.add_resource(MediaResource,
+                 f'/{Config.VERSION}/media/<int:id_media>')  # GET
+api.add_resource(MediaDownloadResource,
+                 f'/{Config.VERSION}/media/download/<int:id_media>') # GET
 
 api.add_resource(PostsListResource,
-                 f'/{Config.VERSION}/posts')  # GET, POST
+                 f'/{Config.VERSION}/posts/')  # GET, POST
 
 api.add_resource(AddMediaToPostResource,
                  f'/{Config.VERSION}/posts/<int:id_post>')  # GET, POST
@@ -57,6 +60,9 @@ docs.register(ChannelsResource)
 docs.register(ChannelsSetUserResource)
 
 docs.register(MediaListResource)
+docs.register(MediaResource)
+docs.register(MediaDownloadResource)
+
 docs.register(PostsListResource)
 docs.register(AddMediaToPostResource)
 docs.register(EventsListResource)

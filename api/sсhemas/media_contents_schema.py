@@ -7,7 +7,7 @@ from marshmallow import fields
 # object ------>  dict ----------> json
 
 # Сериализация ответа(response)
-
+from config import Config
 
 
 class MediaContentsSchema(ma.SQLAlchemySchema):

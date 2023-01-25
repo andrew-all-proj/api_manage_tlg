@@ -1,3 +1,4 @@
+import shutil
 from pathlib import Path
 
 from api import db, auth_manager
@@ -22,6 +23,10 @@ def application():
 
     db.session.close()
     db.drop_all()
+    try:
+        shutil.rmtree(f"{Config.BASE_DIR}/1")
+    except:
+        print()
 
 
 @pytest.fixture()
