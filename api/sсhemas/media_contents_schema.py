@@ -30,7 +30,8 @@ class MediaContentsRequestSchema(ma.SQLAlchemySchema):
     name_file = ma.Str(required=True)
 
 
-class MediaContentsPostSchema(ma.SQLAlchemySchema):
+class MediaChangeSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = TypeMediaModel
 
-
-    image = ma.Str(required=True)
+    description = ma.Str(required=True)

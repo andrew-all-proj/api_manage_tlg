@@ -13,7 +13,8 @@ from werkzeug.utils import secure_filename
 
 from api import g, app
 from api.models.media_contents_model import TypeMediaModel, MediaContentModel
-from api.sсhemas.media_contents_schema import MediaContentsSchema, MediaContentsRequestSchema, MediaContentsPostSchema
+from api.sсhemas.media_contents_schema import MediaContentsSchema, MediaContentsRequestSchema, \
+    MediaChangeSchema
 from flask_apispec import marshal_with, use_kwargs, doc
 
 from config import Config
@@ -90,10 +91,28 @@ class MediaResource(MethodResource):
                                                     MediaContentModel.id_media == id_media,
                                                     MediaContentModel.is_archive == False)).first()
         if not media:
-            return {"error": "channel not found"}, 404
+            return {"error": "media not found"}, 404
         media.obj_to_archive()
         media.save()
         return {}, 200
+
+
+    @require_token()
+    @doc(security=[{"bearerAuth": []}])
+    @marshal_with(MediaContentsSchema, code=200)
+    @use_kwargs(MediaChangeSchema, location='json')
+    @doc(description='Full: Change data chanel by id')
+    @doc(summary='Change data chanel by id')
+    def put(self, id_media, **kwargs):
+        media = MediaContentModel.query.filter(and_(MediaContentModel.id_user == current_token.scope,
+                                                    MediaContentModel.id_media == id_media,
+                                                    MediaContentModel.is_archive == False)).first()
+        if not media:
+            return {"error": "media not found"}, 404
+        media.description = kwargs.get('description') or media.description
+        if not media.save():
+            return {"error": "update data base"}, 400
+        return media, 200
 
 
 @doc(description='Api for media', tags=['Media'])

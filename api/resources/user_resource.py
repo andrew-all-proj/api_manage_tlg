@@ -29,7 +29,8 @@ class UsersListResource(MethodResource):
         if user:
             return {"error": "email is exist"}, 400
         user = UserModel(**kwargs)
-        user.save()
+        if not user.save():
+            return {"error": "update data base"}, 400
         return user, 201
 
 @doc(description='Api for user.', tags=['Users'])

@@ -12,6 +12,7 @@ class TagModel(db.Model, ModelDbExt):
     id_tag = db.Column(db.Integer, primary_key=True)
     tag_name = db.Column(db.String(50), nullable=False)
     id_channel = db.Column(db.Integer, db.ForeignKey("channels.id_channel"))
+    __table_args__ = (db.UniqueConstraint('tag_name', 'id_channel', name='_tag_channel_uc'),)
 
     def __init__(self, tag_name, id_channel):
         self.tag_name = tag_name
