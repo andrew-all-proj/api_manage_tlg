@@ -1,8 +1,8 @@
-"""is archive
+"""add post date create and date update
 
-Revision ID: c06e5d86279c
+Revision ID: e5d5ee2251ac
 Revises: 
-Create Date: 2023-01-19 17:16:14.019333
+Create Date: 2023-01-27 13:27:28.646457
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c06e5d86279c'
+revision = 'e5d5ee2251ac'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -28,7 +28,7 @@ def upgrade():
     op.create_table('users',
     sa.Column('id_user', sa.Integer(), nullable=False),
     sa.Column('user_name', sa.String(length=30), nullable=False),
-    sa.Column('id_telegram', sa.Integer(), nullable=True),
+    sa.Column('id_telegram', sa.String(length=50), nullable=True),
     sa.Column('email', sa.String(length=50), nullable=False),
     sa.Column('password', sa.String(length=128), nullable=False),
     sa.Column('date_regestration', sa.DateTime(), nullable=False),
@@ -77,6 +77,8 @@ def upgrade():
     sa.Column('id_post', sa.Integer(), nullable=False),
     sa.Column('text', sa.String(length=3000), nullable=True),
     sa.Column('id_user', sa.Integer(), nullable=False),
+    sa.Column('date_create', sa.DateTime(), nullable=False),
+    sa.Column('data_update', sa.DateTime(), nullable=False),
     sa.Column('is_archive', sa.Boolean(), nullable=False),
     sa.ForeignKeyConstraint(['id_user'], ['users.id_user'], ),
     sa.PrimaryKeyConstraint('id_post')
@@ -105,7 +107,8 @@ def upgrade():
     sa.Column('tag_name', sa.String(length=50), nullable=False),
     sa.Column('id_channel', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['id_channel'], ['channels.id_channel'], ),
-    sa.PrimaryKeyConstraint('id_tag')
+    sa.PrimaryKeyConstraint('id_tag'),
+    sa.UniqueConstraint('tag_name', 'id_channel', name='_tag_channel_uc')
     )
     op.create_table('users_channels',
     sa.Column('id_user_channel', sa.Integer(), nullable=False),
@@ -113,7 +116,8 @@ def upgrade():
     sa.Column('id_channel', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['id_channel'], ['channels.id_channel'], ),
     sa.ForeignKeyConstraint(['id_user'], ['users.id_user'], ),
-    sa.PrimaryKeyConstraint('id_user_channel')
+    sa.PrimaryKeyConstraint('id_user_channel'),
+    sa.UniqueConstraint('id_user', 'id_channel', name='_user_channel_uc')
     )
     op.create_table('media_tags',
     sa.Column('id_tag', sa.Integer(), nullable=False),

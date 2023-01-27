@@ -16,7 +16,7 @@ class EventModel(db.Model, ModelDbExt):
     completed = db.Column(db.Boolean, nullable=False, default=False)
     post = db.relationship(PostsModel, backref='posts', uselist=False, lazy='subquery')
 
-    def __init__(self, id_post, id_channel, date_start, date_stop=None, id_message=0):
+    def __init__(self, id_post, id_channel, date_start, date_stop=None, id_message=None):
         self.id_post = id_post
         self.id_channel = id_channel
         self.date_start = date_start

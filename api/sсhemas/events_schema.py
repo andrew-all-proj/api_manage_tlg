@@ -15,21 +15,30 @@ class EventsSchema(ma.SQLAlchemySchema):
     class Meta:
         model = EventModel
 
-    id_message = ma.auto_field(required=True)
-    id_channel = ma.auto_field(required=True)
-    date_start = ma.auto_field(required=True)
-    date_stop = ma.auto_field(required=True)
-    post = ma.Nested(PostSchema)
-
-
-class EventsRequestSchema(ma.SQLAlchemySchema):
-    class Meta:
-        model = EventModel
-
-    id_post = ma.auto_field(required=True)
     id_event = ma.auto_field(required=True)
     id_message = ma.auto_field(required=True)
     id_channel = ma.auto_field(required=True)
     date_start = ma.auto_field(required=True)
     date_stop = ma.auto_field(required=True)
     completed = ma.auto_field(required=True)
+    post = ma.Nested(PostSchema)
+
+
+class EventsCreateSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = EventModel
+
+    id_post = ma.auto_field(required=True)
+    id_channel = ma.auto_field(required=True)
+    date_start = ma.auto_field(required=True)
+    date_stop = ma.auto_field(required=False)
+
+
+class EventsChangeSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = EventModel
+
+    id_post = ma.auto_field(required=False)
+    date_start = ma.auto_field(required=False)
+    date_stop = ma.auto_field(required=False)
+

@@ -8,16 +8,17 @@ from flask_pyjwt import require_token, current_token
 from flask_restful import reqparse
 from sqlalchemy import and_
 from webargs import fields
-from werkzeug.security import safe_join
-from werkzeug.utils import secure_filename
 
-from api import g, app
 from api.models.media_contents_model import TypeMediaModel, MediaContentModel
-from api.sсhemas.media_contents_schema import MediaContentsSchema, MediaContentsRequestSchema, \
-    MediaChangeSchema
+from api.sсhemas.media_contents_schema import MediaContentsSchema, MediaChangeSchema
 from flask_apispec import marshal_with, use_kwargs, doc
 
 from config import Config
+
+def get_media(id_user, id_media):
+    return MediaContentModel.query.filter(and_(MediaContentModel.id_user == id_user,
+                                                    MediaContentModel.id_media == id_media,
+                                                    MediaContentModel.is_archive == False)).first()
 
 
 @doc(description='Api for media', tags=['Media'])
@@ -76,9 +77,7 @@ class MediaResource(MethodResource):
     @doc(summary='Get media by id')
     @doc(description='Full: Get media by id')
     def get(self, id_media):
-        media = MediaContentModel.query.filter(and_(MediaContentModel.id_user == current_token.scope,
-                                                    MediaContentModel.id_media == id_media,
-                                                    MediaContentModel.is_archive == False)).first()
+        media = get_media(current_token.scope, id_media)
         return media, 200
 
     @require_token()
@@ -87,9 +86,7 @@ class MediaResource(MethodResource):
     @doc(summary='Get media by id')
     @doc(description='Full: Get media by id')
     def delete(self, id_media):
-        media = MediaContentModel.query.filter(and_(MediaContentModel.id_user == current_token.scope,
-                                                    MediaContentModel.id_media == id_media,
-                                                    MediaContentModel.is_archive == False)).first()
+        media = get_media(current_token.scope, id_media)
         if not media:
             return {"error": "media not found"}, 404
         media.to_archive()
@@ -104,9 +101,7 @@ class MediaResource(MethodResource):
     @doc(description='Full: Change data chanel by id')
     @doc(summary='Change data chanel by id')
     def put(self, id_media, **kwargs):
-        media = MediaContentModel.query.filter(and_(MediaContentModel.id_user == current_token.scope,
-                                                    MediaContentModel.id_media == id_media,
-                                                    MediaContentModel.is_archive == False)).first()
+        media = get_media(current_token.scope, id_media)
         if not media:
             return {"error": "media not found"}, 404
         media.description = kwargs.get('description') or media.description
@@ -122,9 +117,7 @@ class MediaDownloadResource(MethodResource):
     @doc(summary='Download media by id')
     @doc(description='Full: Download media by id')
     def get(self, id_media):
-        media = MediaContentModel.query.filter(and_(MediaContentModel.id_user == current_token.scope,
-                                                    MediaContentModel.id_media == id_media,
-                                                    MediaContentModel.is_archive == False)).first()
+        media = get_media(current_token.scope, id_media)
         if not media:
             return {"error": "Not file"}, 404
         type_media = TypeMediaModel.query.filter_by(id_type_media=media.id_type_media).first()

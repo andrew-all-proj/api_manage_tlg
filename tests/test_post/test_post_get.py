@@ -48,7 +48,7 @@ def test_get_post_by_id_no_auth(client, user, auth_headers, post, post2):
     assert response.status_code == 401
 
 
-def test_get_post_by_id_no_ecxisit_post(client, user, auth_headers, post, post2):
+def test_get_post_by_id_no_exsit_post(client, user, auth_headers, post, post2):
     """
         Тест на получение поста по не существующего id
     """

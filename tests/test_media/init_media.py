@@ -10,7 +10,7 @@ from config import Config
 @pytest.fixture()
 def media(user):
     """
-        Фикстура по созданию в бд тестового канала
+        Фикстура по созданию в бд тестового медиа
     """
     type_media = [{
       "type_media": "video",

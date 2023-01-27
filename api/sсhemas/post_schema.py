@@ -18,6 +18,8 @@ class PostSchema(ma.SQLAlchemySchema):
     id_post = ma.auto_field(required=True)
     text = ma.auto_field(required=True)
     media = ma.Nested(MediaContentsSchema, many=True)
+    date_create = ma.auto_field(required=True)
+    data_update = ma.auto_field(required=True)
 
 
 # Десериализация запроса(request)

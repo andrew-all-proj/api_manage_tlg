@@ -64,6 +64,8 @@ class ChannelsResource(MethodResource):
         channel = get_chanel(current_token.scope, id_channel)
         if not channel:
             return {"error": "channel not found"}, 404
+        if channel.id_user_admin != current_token.scope:
+            return {"error": "it can doing only admin"}, 400
         channel.to_archive()
         channel.save()
         return {}, 200
@@ -78,6 +80,8 @@ class ChannelsResource(MethodResource):
         channel = get_chanel(current_token.scope, id_channel)
         if not channel:
             return {"error": "channel not found"}, 404
+        if channel.id_user_admin != current_token.scope:
+            return {"error": "it can doing only admin"}, 400
         channel.name_channel = kwargs.get('name_channel') or channel.name_channel
         channel.link_channel = kwargs.get('link_channel') or channel.link_channel
         channel.id_telegram = kwargs.get('id_telegram') or channel.id_telegram
@@ -112,6 +116,8 @@ class ChannelsSetUserResource(MethodResource):
         channel = get_chanel(current_token.scope, id_channel)
         if not channel:
             return {"error": "channel not found"}, 404
+        if channel.id_user_admin != current_token.scope:
+            return {"error": "it can doing only admin"}, 400
         user_channel = UserChannelModel.query.filter(and_(UserChannelModel.id_channel == id_channel,
                                                           UserChannelModel.id_user == id_user)).first()
         if not user_channel or not user_channel.delete():
