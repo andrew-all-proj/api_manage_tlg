@@ -39,7 +39,7 @@ def test_get_tag_no_auth(client, user, headers_user, media, channel, tags):
 
 
 
-def test_get_tag_no_exsist_tag(client, user, headers_user, media, channel, tags):
+def test_get_tag_no_exist_tag(client, user, headers_user, media, channel, tags):
     """
         Тест на изменения имени тега не авторизованного пользователя
     """

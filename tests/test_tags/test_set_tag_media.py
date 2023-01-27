@@ -31,7 +31,7 @@ def test_tag_set_media(client, user, headers_user, media, channel, tg):
     assert tag_bd.id_tag == id_tag
 
 
-def test_media_no_ecxist_id_tag(client, user, headers_user, media, channel, tg):
+def test_media_no_exist_id_tag(client, user, headers_user, media, channel, tg):
     """
         Тест на привязку тега к медиа не существующего id  тега
     """

@@ -76,6 +76,7 @@ class TagsResource(MethodResource):
             return {"error": "tag not found"}, 404
         return tag, 200
 
+
     @require_token()
     @doc(security=[{"bearerAuth": []}])
     @doc(summary='Delete tags by id tag')

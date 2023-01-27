@@ -33,7 +33,7 @@ def test_delete_tag_auth(client, user, headers_user, media, channel, tags):
     assert response.status_code == 401
 
 
-def test_delete_tag_no_excsist_id_tag(client, user, headers_user, media, channel, tags):
+def test_delete_tag_no_exist_id_tag(client, user, headers_user, media, channel, tags):
     """
         Тест на удаление тега по id
     """

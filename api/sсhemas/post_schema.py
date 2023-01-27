@@ -1,3 +1,5 @@
+from marshmallow import fields
+
 from api import ma
 from api.models.posts_model import PostsModel
 from api.sсhemas.media_contents_schema import MediaContentsSchema
@@ -19,9 +21,8 @@ class PostSchema(ma.SQLAlchemySchema):
 
 
 # Десериализация запроса(request)
-class PostRequestSchema(ma.SQLAlchemySchema):
+class PostCreatetSchema(ma.SQLAlchemySchema):
     class Meta:
         model = PostsModel
 
-    text = ma.Str()
-    id_media = ma.Int()
+    text = ma.Str(required=False)

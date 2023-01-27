@@ -4,7 +4,7 @@ from api.resources.auth_resource import TokenResource
 from api.resources.channel_resource import ChannelsListResource, ChannelsResource, ChannelsSetUserResource
 from api.resources.events_resource import EventsListResource, EventsResource
 from api.resources.media_contents_resource import MediaListResource, MediaResource, MediaDownloadResource
-from api.resources.posts_resource import PostsListResource, AddMediaToPostResource
+from api.resources.posts_resource import PostsListResource, AddMediaToPostResource, PostsResource
 from api.resources.tags_resource import TagsListResource, MediaSetTagsResource, TagsResource, TagsCreateResource
 from config import Config
 from api.resources.user_resource import UsersListResource, UserResource
@@ -38,10 +38,12 @@ api.add_resource(MediaDownloadResource,
                  f'/{Config.VERSION}/media/download/<int:id_media>') # GET
 
 api.add_resource(PostsListResource,
-                 f'/{Config.VERSION}/posts/')  # GET, POST
-
+                 f'/{Config.VERSION}/posts')  # GET, POST
+api.add_resource(PostsResource,
+                 f'/{Config.VERSION}/posts/<int:id_post>')  # GET
 api.add_resource(AddMediaToPostResource,
-                 f'/{Config.VERSION}/posts/<int:id_post>')  # GET, POST
+                 f'/{Config.VERSION}/posts/<int:id_post>/setmedia')  # PUT
+
 api.add_resource(EventsListResource,
                  f'/{Config.VERSION}/events/<int:id_channel>')  # GET
 api.add_resource(EventsResource,
@@ -50,13 +52,14 @@ api.add_resource(EventsResource,
 api.add_resource(TagsListResource,
                  f'/{Config.VERSION}/tags/channel/<int:id_channel>')  # GET
 api.add_resource(MediaSetTagsResource,
-                 f'/{Config.VERSION}/media/<int:id_media>/settags')
+                 f'/{Config.VERSION}/media/<int:id_media>/settags')  # PUT DELETE
 api.add_resource(TagsCreateResource,
                  f'/{Config.VERSION}/tags')  # POST
 api.add_resource(TagsResource,
-                 f'/{Config.VERSION}/tags/<int:id_tag>')  # GET
+                 f'/{Config.VERSION}/tags/<int:id_tag>')  # GET PUT DELETE
 
 docs.register(TokenResource)
+
 docs.register(UserResource)
 docs.register(UsersListResource)
 
@@ -69,7 +72,9 @@ docs.register(MediaResource)
 docs.register(MediaDownloadResource)
 
 docs.register(PostsListResource)
+docs.register(PostsResource)
 docs.register(AddMediaToPostResource)
+
 docs.register(EventsListResource)
 docs.register(EventsResource)
 
