@@ -39,7 +39,4 @@ class ChannelModel(db.Model, ModelDbExt):
         self.id_telegram = id_telegram
         self.id_user_admin = id_user_admin
 
-    def channel_to_archive(self):
-        self.is_archive = True
-
 

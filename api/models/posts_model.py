@@ -1,3 +1,5 @@
+import datetime
+
 from api import db
 from api.models.media_contents_model import MediaContentModel
 from api.models.mixins import ModelDbExt
@@ -14,6 +16,8 @@ class PostsModel(db.Model, ModelDbExt):
     id_post = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(3000))
     id_user = db.Column(db.Integer, db.ForeignKey("users.id_user"), nullable=False)
+    date_create = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now)
+    data_update = db.Column(db.DateTime, nullable=False, onupdate=datetime.datetime.now, default=datetime.datetime.now)
     is_archive = db.Column(db.Boolean, nullable=False, default=False)
     media = db.relationship(MediaContentModel, secondary=media, lazy='subquery')
 

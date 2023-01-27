@@ -26,5 +26,5 @@ class ModelDbExt:
             print(ex)
             return False
 
-    def obj_to_archive(self):
+    def to_archive(self):
         self.is_archive = True

@@ -92,7 +92,7 @@ class MediaResource(MethodResource):
                                                     MediaContentModel.is_archive == False)).first()
         if not media:
             return {"error": "media not found"}, 404
-        media.obj_to_archive()
+        media.to_archive()
         media.save()
         return {}, 200
 

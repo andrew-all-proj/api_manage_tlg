@@ -33,6 +33,7 @@ class UsersListResource(MethodResource):
             return {"error": "update data base"}, 400
         return user, 201
 
+
 @doc(description='Api for user.', tags=['Users'])
 class UserResource(MethodResource):
     @require_token()
@@ -59,7 +60,7 @@ class UserResource(MethodResource):
             return {"error": "user in archive"}, 400
         if user.id_user != current_token.scope:
             return {"error": "You can delete only own profile"}, 400
-        user.user_to_archive()
+        user.to_archive()
         user.save()
         return {}, 200
 

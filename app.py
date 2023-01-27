@@ -42,7 +42,7 @@ api.add_resource(PostsListResource,
 api.add_resource(PostsResource,
                  f'/{Config.VERSION}/posts/<int:id_post>')  # GET
 api.add_resource(AddMediaToPostResource,
-                 f'/{Config.VERSION}/posts/<int:id_post>/setmedia')  # PUT
+                 f'/{Config.VERSION}/posts/<int:id_post>/setmedia')  # PUT DELETE
 
 api.add_resource(EventsListResource,
                  f'/{Config.VERSION}/events/<int:id_channel>')  # GET

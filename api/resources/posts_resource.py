@@ -7,9 +7,15 @@ from api.models.media_contents_model import MediaContentModel
 from api.models.posts_model import PostsModel
 from flask_apispec import marshal_with, doc, use_kwargs
 from api.sсhemas.post_schema import PostSchema, PostCreatetSchema
-from api.sсhemas.user_sсhema import UserSchema
 
 
+def get_post(id_user, id_post):
+    return PostsModel.query.filter(and_(PostsModel.id_user == id_user,
+                                        PostsModel.id_post == id_post,
+                                        PostsModel.is_archive == False)).first()
+
+
+#/posts
 @doc(description='Api for posts', tags=['Posts'])
 class PostsListResource(MethodResource):
     @require_token()
@@ -21,6 +27,7 @@ class PostsListResource(MethodResource):
         posts = PostsModel.query.filter(and_(PostsModel.id_user == current_token.scope,
                                              PostsModel.is_archive == False)).all()
         return posts, 200
+
 
     @require_token()
     @doc(security=[{"bearerAuth": []}])
@@ -35,6 +42,7 @@ class PostsListResource(MethodResource):
         return posts, 201
 
 
+#posts/<int:id_post>
 @doc(description='Api for posts', tags=['Posts'])
 class PostsResource(MethodResource):
     @require_token()
@@ -43,12 +51,41 @@ class PostsResource(MethodResource):
     @doc(summary='Get post by id')
     @doc(description='Full: Get post by id')
     def get(self, id_post):
-        posts = PostsModel.query.filter(and_(PostsModel.id_user == current_token.scope,
-                                             PostsModel.id_post == id_post,
-                                             PostsModel.is_archive == False)).first()
-        return posts, 200
+        return get_post(current_token.scope, id_post), 200
 
 
+    @require_token()
+    @doc(security=[{"bearerAuth": []}])
+    @marshal_with(PostSchema, code=200)
+    @use_kwargs(PostCreatetSchema, location='json')
+    @doc(summary='Change post by id')
+    @doc(description='Full: Change post by id')
+    def put(self, id_post, **kwargs):
+        post = get_post(current_token.scope, id_post)
+        if not post:
+            return {"error": "post not found"}, 404
+        post.text = kwargs.get('text') or post.text
+        if not post.save():
+            return {"error": "update data base"}, 400
+        return post, 200
+
+
+    @require_token()
+    @doc(security=[{"bearerAuth": []}])
+    @marshal_with(PostSchema, code=200)
+    @doc(summary='Delete post by id')
+    @doc(description='Full: Delete post by id')
+    def delete(self, id_post):
+        post = get_post(current_token.scope, id_post)
+        if not post:
+            return {"error": "channel not found"}, 404
+        post.to_archive()
+        if not post.save():
+            return {"error": "update data base"}, 400
+        return {}, 200
+
+
+#posts/<int:id_post>/setmedia
 @doc(description='Api for posts', tags=['Posts'])
 class AddMediaToPostResource(MethodResource):
     @require_token()
@@ -58,9 +95,7 @@ class AddMediaToPostResource(MethodResource):
     @doc(summary='Add media to post')
     @doc(description='Add media to post')
     def put(self, id_post, **kwargs):
-        post = PostsModel.query.filter(and_(PostsModel.id_user == current_token.scope,
-                                            PostsModel.id_post == id_post,
-                                            PostsModel.is_archive == False)).first()
+        post = get_post(current_token.scope, id_post)
         if not post:
             return {"error": "post not found"}, 404
         for id_media in kwargs["media"]:
@@ -71,3 +106,24 @@ class AddMediaToPostResource(MethodResource):
         if not post.save():
             return {"error": "save in bd"}, 400
         return post, 200
+
+
+    @require_token()
+    @doc(security=[{"bearerAuth": []}])
+    @marshal_with(PostSchema, code=200)
+    @use_kwargs({"media": fields.List(fields.Int())}, location='json')
+    @doc(summary='Unset media from post')
+    @doc(description='Unset media from post')
+    def delete(self, id_post, **kwargs):
+        post = get_post(current_token.scope, id_post)
+        if not post:
+            return {"error": "post not found"}, 404
+        for id_media in kwargs["media"]:
+            media = MediaContentModel.query.get(id_media)
+            if not media:
+                return {"error": f"id media {id_media} not found"}, 404
+            post.media.remove(media)
+        if not post.save():
+            return {"error": "save in bd"}, 400
+        return post, 200
+

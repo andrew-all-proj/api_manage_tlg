@@ -41,8 +41,6 @@ class UserModel(db.Model, ModelDbExt):
     def verify_password(self, password):
         return pwd_context.verify(password, self.password)
 
-    def user_to_archive(self):
-        self.is_archive = True
 
     def generate_auth_token(self, expiration=600):
         s = Serialier(Config.SECRET_KEY)

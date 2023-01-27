@@ -157,9 +157,12 @@ class MediaSetTagsResource(MethodResource):
             return {"error": "media not found"}, 404
         for id_tag in kwargs["tags"]:
             tag = TagModel.query.get(id_tag)
-            if not tag: continue
+            if not tag:
+                return {"error": f"tag {id_tag} not found"}, 404
             channel = get_channel(tag.id_channel, current_token.scope)
-            if not channel: continue
+            if not channel:
+                return {"error": f"channel not found"}, 404
             media.tags.remove(tag)
-        media.save()
+        if not media.save():
+            return {"error": "save in bd"}, 400
         return media, 200
