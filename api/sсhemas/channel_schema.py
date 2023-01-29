@@ -1,13 +1,9 @@
 from marshmallow import validate
 
 from api import ma
-from api.models.channels_model import ChannelModel, UserChannelModel
+from api.models.channels_model import ChannelModel
 
 
-#       schema        flask-restful
-# object ------>  dict ----------> json
-
-# Сериализация ответа(response)
 class ChannelSchema(ma.SQLAlchemySchema):
     class Meta:
         model = ChannelModel
@@ -18,7 +14,7 @@ class ChannelSchema(ma.SQLAlchemySchema):
     id_telegram = ma.auto_field(required=True)
     is_archive = ma.auto_field(required=False)
 
-# Десериализация запроса(request)
+
 class ChannelRequestSchema(ma.SQLAlchemySchema):
     class Meta:
         model = ChannelModel
@@ -26,6 +22,7 @@ class ChannelRequestSchema(ma.SQLAlchemySchema):
     name_channel = ma.auto_field(required=True)
     link_channel = ma.auto_field(required=True)
     id_telegram = ma.auto_field(required=True)
+
 
 class ChannelChangeSchema(ma.SQLAlchemySchema):
     class Meta:

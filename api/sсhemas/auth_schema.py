@@ -9,6 +9,6 @@ class AuthSchema(ma.SQLAlchemySchema):
     password = ma.Str(required=True)
     email = ma.Str(required=True)
 
-class AutrResponseSchema(ma.SQLAlchemySchema):
 
+class AutrResponseSchema(ma.SQLAlchemySchema):
     auth_token = ma.Str(required=True)

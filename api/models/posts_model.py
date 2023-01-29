@@ -1,13 +1,12 @@
 import datetime
-
 from api import db
 from api.models.media_contents_model import MediaContentModel
 from api.models.mixins import ModelDbExt
 
 media = db.Table('posts_media',
-                db.Column('id_post', db.Integer, db.ForeignKey('posts.id_post'), primary_key=True),
-                db.Column('id_media', db.Integer, db.ForeignKey('media_contents.id_media'), primary_key=True)
-                )
+                 db.Column('id_post', db.Integer, db.ForeignKey('posts.id_post'), primary_key=True),
+                 db.Column('id_media', db.Integer, db.ForeignKey('media_contents.id_media'), primary_key=True)
+                 )
 
 
 class PostsModel(db.Model, ModelDbExt):
@@ -21,8 +20,6 @@ class PostsModel(db.Model, ModelDbExt):
     is_archive = db.Column(db.Boolean, nullable=False, default=False)
     media = db.relationship(MediaContentModel, secondary=media, lazy='subquery')
 
-
     def __init__(self, id_user, text=None):
         self.text = text
         self.id_user = id_user
-

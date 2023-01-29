@@ -22,8 +22,7 @@ class PostSchema(ma.SQLAlchemySchema):
     data_update = ma.auto_field(required=True)
 
 
-# Десериализация запроса(request)
-class PostCreatetSchema(ma.SQLAlchemySchema):
+class PostCreateSchema(ma.SQLAlchemySchema):
     class Meta:
         model = PostsModel
 

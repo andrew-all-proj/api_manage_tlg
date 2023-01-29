@@ -7,6 +7,7 @@ from api.models.mixins import ModelDbExt
 
 class UserChannelModel(db.Model, ModelDbExt):
     __tablename__ = "users_channels"
+
     id_user_channel = db.Column(db.Integer, primary_key=True)
     id_user = db.Column(db.Integer, db.ForeignKey("users.id_user"), nullable=False)
     id_channel = db.Column(db.Integer, db.ForeignKey("channels.id_channel"), nullable=False)
@@ -15,7 +16,6 @@ class UserChannelModel(db.Model, ModelDbExt):
     def __init__(self, id_channel, id_user):
         self.id_channel = id_channel
         self.id_user = id_user
-
 
 
 class ChannelModel(db.Model, ModelDbExt):
@@ -38,5 +38,3 @@ class ChannelModel(db.Model, ModelDbExt):
         self.link_channel = link_channel
         self.id_telegram = id_telegram
         self.id_user_admin = id_user_admin
-
-

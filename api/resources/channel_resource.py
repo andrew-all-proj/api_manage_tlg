@@ -14,6 +14,7 @@ def get_chanel(id_user, id_channel):
                     ChannelModel.is_archive == False)).first()
 
 
+# /channels
 @doc(description='Api for channel', tags=['Channels'])
 class ChannelsListResource(MethodResource):
     @require_token()
@@ -27,10 +28,10 @@ class ChannelsListResource(MethodResource):
                         ChannelModel.is_archive == False)).all()
         return channels, 200
 
-
     @require_token()
     @doc(security=[{"bearerAuth": []}])
-    @doc(description='create new channel')
+    @doc(description='Full: create new channel')
+    @doc(summary='create new channel')
     @marshal_with(ChannelSchema, code=201)
     @use_kwargs(ChannelRequestSchema, location='json')
     def post(self, **kwargs):
@@ -44,6 +45,7 @@ class ChannelsListResource(MethodResource):
         return channel, 201
 
 
+# /channels/<int: id_channel>
 @doc(description='Api for channel', tags=['Channels'])
 class ChannelsResource(MethodResource):
     @require_token()
@@ -90,6 +92,7 @@ class ChannelsResource(MethodResource):
         return channel, 200
 
 
+# channels/{id_channel}/users/{id_user}
 @doc(description='Api for channel', tags=['Channels'])
 class ChannelsSetUserResource(MethodResource):
     @require_token()
@@ -105,7 +108,6 @@ class ChannelsSetUserResource(MethodResource):
         if not user_channel.save():
             return {"error": "update data base"}, 400
         return channel, 200
-
 
     @require_token()
     @doc(security=[{"bearerAuth": []}])

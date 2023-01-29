@@ -1,13 +1,11 @@
 import datetime
 from passlib.apps import custom_app_context as pwd_context
-from api import db, Config
+from api import db
 from api.models.auth_model import AuthHistoryModel
 from api.models.channels_model import UserChannelModel, ChannelModel
 from api.models.media_contents_model import MediaContentModel
 from api.models.mixins import ModelDbExt
 from api.models.posts_model import PostsModel
-from itsdangerous import URLSafeSerializer as Serialier
-from itsdangerous import BadSignature, SignatureExpired
 
 
 class UserModel(db.Model, ModelDbExt):
@@ -40,26 +38,3 @@ class UserModel(db.Model, ModelDbExt):
 
     def verify_password(self, password):
         return pwd_context.verify(password, self.password)
-
-
-    def generate_auth_token(self, expiration=600):
-        s = Serialier(Config.SECRET_KEY)
-        return s.dumps({'id_user': self.id_user})
-            
-
-
-    @staticmethod
-    def verify_auth_token(token):
-        s = Serialier(Config.SECRET_KEY)
-        try:
-            data = s.loads(token)
-        except SignatureExpired:
-            return None
-        except BadSignature:
-            return None
-        user = UserModel.query.get(data['id_user'])
-        return user
-
-
-
-

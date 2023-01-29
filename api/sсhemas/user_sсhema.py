@@ -3,10 +3,7 @@ from marshmallow import validate
 from api import ma
 from api.models.users_model import UserModel
 
-#       schema        flask-restful
-# object ------>  dict ----------> json
 
-# Сериализация ответа(response)
 class UserSchema(ma.SQLAlchemySchema):
     class Meta:
         model = UserModel
@@ -17,7 +14,6 @@ class UserSchema(ma.SQLAlchemySchema):
     id_telegram = ma.auto_field(required=True)
 
 
-# Десериализация запроса(request)
 class UserRequestSchema(ma.SQLAlchemySchema):
     class Meta:
         model = UserModel
@@ -35,5 +31,3 @@ class UserLisrSchema(ma.SQLAlchemySchema):
     id_user = ma.auto_field(required=True)
     user_name = ma.auto_field(required=True)
     is_archive = ma.auto_field(required=True)
-
-

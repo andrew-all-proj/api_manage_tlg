@@ -13,8 +13,6 @@ class ModelDbExt:
             return False
         except Exception as ex:
             db.session.rollback()
-            print(ex)
-            print(type(ex))
             return False
 
     def delete(self):

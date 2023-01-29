@@ -4,7 +4,7 @@ from api.resources.auth_resource import TokenResource
 from api.resources.channel_resource import ChannelsListResource, ChannelsResource, ChannelsSetUserResource
 from api.resources.events_resource import EventsListResource, EventsResource, EventsCreateResource
 from api.resources.media_contents_resource import MediaListResource, MediaResource, MediaDownloadResource
-from api.resources.posts_resource import PostsListResource, AddMediaToPostResource, PostsResource
+from api.resources.posts_resource import PostsListResource, AddMediaToPostResource, PostsResource, PostsCreateResource
 from api.resources.tags_resource import TagsListResource, MediaSetTagsResource, TagsResource, TagsCreateResource
 from config import Config
 from api.resources.user_resource import UsersListResource, UserResource
@@ -38,7 +38,9 @@ api.add_resource(MediaDownloadResource,
                  f'/{Config.VERSION}/media/download/<int:id_media>') # GET
 
 api.add_resource(PostsListResource,
-                 f'/{Config.VERSION}/posts')  # GET, POST
+                 f'/{Config.VERSION}/posts/')  # GET, POST
+api.add_resource(PostsCreateResource,
+                 f'/{Config.VERSION}/posts')
 api.add_resource(PostsResource,
                  f'/{Config.VERSION}/posts/<int:id_post>')  # GET
 api.add_resource(AddMediaToPostResource,
@@ -74,6 +76,7 @@ docs.register(MediaResource)
 docs.register(MediaDownloadResource)
 
 docs.register(PostsListResource)
+docs.register(PostsCreateResource)
 docs.register(PostsResource)
 docs.register(AddMediaToPostResource)
 

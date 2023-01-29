@@ -87,16 +87,16 @@ class EventsResource(MethodResource):
             return {"error": "Not event"}, 404
         event.date_start = kwargs.get('date_start') or event.date_start
         event.date_stop = kwargs.get('date_stop') or event.date_stop
-        if kwargs.get('id_post'):                                               # check belongs to post users channels
+        if kwargs.get('id_post'):  # check belongs to post users channels
             list_users = UserChannelModel.query.filter_by(id_channel=channel.id_channel).all()
             for user in list_users:
                 post = PostsModel.query.filter(and_(PostsModel.id_user == user.id_user,
                                                     PostsModel.id_post == kwargs["id_post"])).first()
-                if post: event.id_post = kwargs["id_post"]
+                if post:
+                    event.id_post = kwargs["id_post"]
         if not event.save():
             return {"error": "update data base"}, 400
         return event, 200
-
 
     @require_token()
     @doc(security=[{"bearerAuth": []}])
@@ -104,12 +104,19 @@ class EventsResource(MethodResource):
     @doc(summary='Change events by id')
     @marshal_with(EventsSchema, code=200)
     def delete(self, id_event):
-        event = EventModel.query.filter_by(id_event=id_event).first()
+        event = EventModel.query.filter(and_(EventModel.id_event == id_event, EventModel.completed == False)).first()
         if not event:
             return {"error": "Not event"}, 404
         channel = get_chanel(current_token.scope, event.id_channel)
         if not channel:
             return {"error": "Not event"}, 404
+        list_users = UserChannelModel.query.filter(and_(UserChannelModel.id_channel == channel.id_channel,
+                                                        UserChannelModel.id_user == current_token.scope)).all()
+        if not list_users:
+            return {"error": "Not event"}, 404
+        event.completed = True
+        if not event.save():
+            return {"error": "update data base"}, 404
         return event, 200
 
 
@@ -118,7 +125,8 @@ class EventsResource(MethodResource):
 class EventsCreateResource(MethodResource):
     @require_token()
     @doc(security=[{"bearerAuth": []}])
-    @doc(description='create new events')
+    @doc(description='Full: create new events')
+    @doc(summary='create new events')
     @marshal_with(EventsSchema, code=201)
     @use_kwargs(EventsCreateSchema, location='json')
     def post(self, **kwargs):

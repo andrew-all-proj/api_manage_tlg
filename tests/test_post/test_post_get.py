@@ -11,7 +11,7 @@ def test_get_post(client, user, auth_headers, post, post2):
         Тест на получение всех своих постов
     """
     post_id = post.id_post
-    response = client.get(f'/{Config.VERSION}/posts',
+    response = client.get(f'/{Config.VERSION}/posts/',
                            headers=auth_headers)
     assert response.status_code == 200
     data = response.json
@@ -23,7 +23,7 @@ def test_get_post_no_auth(client, user, auth_headers, post):
         Тест на получение всех своих постов не авторизованным
     """
     post_id = post.id_post
-    response = client.get(f'/{Config.VERSION}/posts')
+    response = client.get(f'/{Config.VERSION}/posts/')
     assert response.status_code == 401
 
 

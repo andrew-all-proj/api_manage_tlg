@@ -1,7 +1,7 @@
 from flask_apispec.views import MethodResource
 from flask_pyjwt import require_token, current_token
 
-from api import g, db
+from api import db
 from api.models.channels_model import ChannelModel, UserChannelModel
 from api.models.media_contents_model import MediaContentModel
 from api.models.media_tags_model import TagModel, tags
@@ -55,8 +55,8 @@ class TagsListResource(MethodResource):
                         ChannelModel.is_archive == False)).first()
         if not channel:
             return {"error": "channel not found"}, 404
-        tags = TagModel.query.filter_by(id_channel=channel.id_channel).all()
-        return tags, 200
+        list_tags = TagModel.query.filter_by(id_channel=channel.id_channel).all()
+        return list_tags, 200
 
 
 # /tags/<int:id_tag>
@@ -76,7 +76,6 @@ class TagsResource(MethodResource):
             return {"error": "tag not found"}, 404
         return tag, 200
 
-
     @require_token()
     @doc(security=[{"bearerAuth": []}])
     @doc(summary='Delete tags by id tag')
@@ -94,7 +93,6 @@ class TagsResource(MethodResource):
         if not tag.delete():
             return {"error": "tag delete"}, 404
         return {}, 200
-
 
     @require_token()
     @doc(security=[{"bearerAuth": []}])
@@ -115,7 +113,7 @@ class TagsResource(MethodResource):
         return tag, 200
 
 
-#/tags/<int:id_ tag>/settags
+# /tags/<int:id_tag>/settags
 @doc(description='Api for tags', tags=['Tags'])
 class MediaSetTagsResource(MethodResource):
     @require_token()
@@ -141,7 +139,6 @@ class MediaSetTagsResource(MethodResource):
         if not media.save():
             return {"error": "save in bd"}, 400
         return media, 200
-
 
     @require_token()
     @doc(security=[{"bearerAuth": []}])

@@ -2,13 +2,6 @@ from api import ma
 from api.models.media_tags_model import TagModel
 
 
-
-#       schema        flask-restful
-# object ------>  dict ----------> json
-
-# Сериализация ответа(response)
-
-
 class TagSchema(ma.SQLAlchemySchema):
     class Meta:
         model = TagModel
@@ -32,6 +25,7 @@ class TagCreateSchema(ma.SQLAlchemySchema):
 
     tag_name = ma.auto_field(required=True)
     id_channel = ma.auto_field(required=True)
+
 
 class TagChangeSchema(ma.SQLAlchemySchema):
     class Meta:

@@ -1,10 +1,5 @@
 from api import ma
 
-
-#       schema        flask-restful
-# object ------>  dict ----------> json
-
-# Сериализация ответа(response)
 from api.models.media_contents_model import TypeMediaModel
 
 

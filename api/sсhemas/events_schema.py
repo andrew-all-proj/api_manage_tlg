@@ -1,14 +1,6 @@
 from api import ma
 from api.models.events_model import EventModel
 from api.sсhemas.post_schema import PostSchema
-from api.sсhemas.tag_schema import TagSchema
-from api.sсhemas.type_media_schema import TypeMediaSchema
-
-#       schema        flask-restful
-# object ------>  dict ----------> json
-
-# Сериализация ответа(response)
-
 
 
 class EventsSchema(ma.SQLAlchemySchema):
@@ -20,6 +12,7 @@ class EventsSchema(ma.SQLAlchemySchema):
     id_channel = ma.auto_field(required=True)
     date_start = ma.auto_field(required=True)
     date_stop = ma.auto_field(required=True)
+    published = ma.auto_field(required=True)
     completed = ma.auto_field(required=True)
     post = ma.Nested(PostSchema)
 
@@ -41,4 +34,3 @@ class EventsChangeSchema(ma.SQLAlchemySchema):
     id_post = ma.auto_field(required=False)
     date_start = ma.auto_field(required=False)
     date_stop = ma.auto_field(required=False)
-

@@ -21,23 +21,15 @@ class MediaContentModel(db.Model, ModelDbExt):
     name_file = db.Column(db.String(250), nullable=False)
     description = db.Column(db.Text)
     date_download = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now)
-    last_time_used = db.Column(db.DateTime, nullable=False, onupdate=datetime.datetime.now, default=datetime.datetime.now)
+    last_time_used = db.Column(db.DateTime, nullable=False, onupdate=datetime.datetime.now,
+                               default=datetime.datetime.now)
     id_user = db.Column(db.Integer, db.ForeignKey("users.id_user"), nullable=False)
     is_archive = db.Column(db.Boolean, nullable=False, default=False)
     type_media = db.relationship(TypeMediaModel, backref='types_media', uselist=False, lazy='subquery')
     tags = db.relationship(TagModel, secondary=tags, lazy='subquery')
-
 
     def __init__(self, id_user, id_type_media, name_file, description=None):
         self.id_type_media = id_type_media
         self.name_file = name_file
         self.id_user = id_user
         self.description = description
-
-
-
-
-
-
-
-

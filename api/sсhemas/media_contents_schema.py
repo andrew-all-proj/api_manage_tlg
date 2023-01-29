@@ -2,12 +2,6 @@ from api import ma
 from api.models.media_contents_model import MediaContentModel, TypeMediaModel
 from api.sсhemas.tag_schema import TagSchema
 from api.sсhemas.type_media_schema import TypeMediaSchema
-from marshmallow import fields
-#       schema        flask-restful
-# object ------>  dict ----------> json
-
-# Сериализация ответа(response)
-from config import Config
 
 
 class MediaContentsSchema(ma.SQLAlchemySchema):
@@ -21,7 +15,6 @@ class MediaContentsSchema(ma.SQLAlchemySchema):
     tags = ma.Nested(TagSchema, many=True)
 
 
-# Десериализация запроса(request)
 class MediaContentsRequestSchema(ma.SQLAlchemySchema):
     class Meta:
         model = TypeMediaModel

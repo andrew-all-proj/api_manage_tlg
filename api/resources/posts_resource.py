@@ -6,7 +6,7 @@ from webargs import fields
 from api.models.media_contents_model import MediaContentModel
 from api.models.posts_model import PostsModel
 from flask_apispec import marshal_with, doc, use_kwargs
-from api.sсhemas.post_schema import PostSchema, PostCreatetSchema
+from api.sсhemas.post_schema import PostSchema, PostCreateSchema
 
 
 def get_post(id_user, id_post):
@@ -15,24 +15,38 @@ def get_post(id_user, id_post):
                                         PostsModel.is_archive == False)).first()
 
 
-#/posts
+# /posts/?filters
 @doc(description='Api for posts', tags=['Posts'])
 class PostsListResource(MethodResource):
     @require_token()
     @doc(security=[{"bearerAuth": []}])
     @marshal_with(PostSchema(many=True), code=200)
+    @use_kwargs({
+        "page": fields.Int(),
+        "per_page": fields.Int()}, location="query")
     @doc(summary='Get all posts')
     @doc(description='Full: Get all posts')
-    def get(self):
+    def get(self, **kwargs):
+        page = 1
+        per_page = 100
+        if kwargs.get("per_page"):
+            per_page = kwargs["per_page"]
+        if kwargs.get("page"):
+            page = kwargs["page"]
+
         posts = PostsModel.query.filter(and_(PostsModel.id_user == current_token.scope,
-                                             PostsModel.is_archive == False)).all()
+                                             PostsModel.is_archive == False)). \
+            paginate(page, per_page, error_out=False).items
         return posts, 200
 
 
+# /v1/posts
+@doc(description='Api for posts', tags=['Posts'])
+class PostsCreateResource(MethodResource):
     @require_token()
     @doc(security=[{"bearerAuth": []}])
     @marshal_with(PostSchema, code=201)
-    @use_kwargs(PostCreatetSchema, location='json')
+    @use_kwargs(PostCreateSchema, location='json')
     @doc(summary='Create new post')
     @doc(description='Full: Create new post')
     def post(self, **kwargs):
@@ -42,7 +56,7 @@ class PostsListResource(MethodResource):
         return posts, 201
 
 
-#posts/<int:id_post>
+# posts/<int:id_post>
 @doc(description='Api for posts', tags=['Posts'])
 class PostsResource(MethodResource):
     @require_token()
@@ -53,11 +67,10 @@ class PostsResource(MethodResource):
     def get(self, id_post):
         return get_post(current_token.scope, id_post), 200
 
-
     @require_token()
     @doc(security=[{"bearerAuth": []}])
     @marshal_with(PostSchema, code=200)
-    @use_kwargs(PostCreatetSchema, location='json')
+    @use_kwargs(PostCreateSchema, location='json')
     @doc(summary='Change post by id')
     @doc(description='Full: Change post by id')
     def put(self, id_post, **kwargs):
@@ -68,7 +81,6 @@ class PostsResource(MethodResource):
         if not post.save():
             return {"error": "update data base"}, 400
         return post, 200
-
 
     @require_token()
     @doc(security=[{"bearerAuth": []}])
@@ -85,7 +97,7 @@ class PostsResource(MethodResource):
         return {}, 200
 
 
-#posts/<int:id_post>/setmedia
+# posts/<int:id_post>/setmedia
 @doc(description='Api for posts', tags=['Posts'])
 class AddMediaToPostResource(MethodResource):
     @require_token()
@@ -107,7 +119,6 @@ class AddMediaToPostResource(MethodResource):
             return {"error": "save in bd"}, 400
         return post, 200
 
-
     @require_token()
     @doc(security=[{"bearerAuth": []}])
     @marshal_with(PostSchema, code=200)
@@ -126,4 +137,3 @@ class AddMediaToPostResource(MethodResource):
         if not post.save():
             return {"error": "save in bd"}, 400
         return post, 200
-

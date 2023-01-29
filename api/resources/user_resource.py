@@ -1,14 +1,13 @@
 from flask_apispec.views import MethodResource
-from flask_restful import reqparse
-from api import db
 from api.models.users_model import UserModel
 from api.sсhemas.user_sсhema import UserSchema, UserRequestSchema, UserLisrSchema
-from flask_apispec import  marshal_with, use_kwargs, doc
+from flask_apispec import marshal_with, use_kwargs, doc
 from flask_pyjwt import require_token, current_token
 
 from helpers.shortscuts import get_object_or_404
 
 
+# /v1/users
 @doc(description='Api for user.', tags=['Users'])
 class UsersListResource(MethodResource):
     @require_token()
@@ -34,6 +33,7 @@ class UsersListResource(MethodResource):
         return user, 201
 
 
+# /v1/users/<user_id>
 @doc(description='Api for user.', tags=['Users'])
 class UserResource(MethodResource):
     @require_token()
@@ -46,7 +46,6 @@ class UserResource(MethodResource):
         if not user or user.is_archive:
             return {}, 200
         return user, 200
-
 
     @require_token()
     @doc(security=[{"bearerAuth": []}])
@@ -63,7 +62,6 @@ class UserResource(MethodResource):
         user.to_archive()
         user.save()
         return {}, 200
-
 
     @require_token()
     @doc(security=[{"bearerAuth": []}])
@@ -87,6 +85,3 @@ class UserResource(MethodResource):
         if not user.save():
             return {"error": "update data base"}, 400
         return user, 200
-
-
-

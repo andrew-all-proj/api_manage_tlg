@@ -6,6 +6,7 @@ tags = db.Table('media_tags',
                 db.Column('id_media', db.Integer, db.ForeignKey('media_contents.id_media'), primary_key=True)
                 )
 
+
 class TagModel(db.Model, ModelDbExt):
     __tablename__ = "tags"
 
@@ -17,6 +18,3 @@ class TagModel(db.Model, ModelDbExt):
     def __init__(self, tag_name, id_channel):
         self.tag_name = tag_name
         self.id_channel = id_channel
-
-
-

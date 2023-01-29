@@ -7,6 +7,7 @@ from api.models.users_model import UserModel
 from api.sсhemas.auth_schema import AuthSchema, AutrResponseSchema
 
 
+#/v1/auth
 @doc(description='Api for authentication user', tags=['Authentication'])
 class TokenResource(MethodResource):
     @doc(summary='Get token')
