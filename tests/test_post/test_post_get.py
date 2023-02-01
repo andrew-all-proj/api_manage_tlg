@@ -14,7 +14,7 @@ def test_get_post(client, user, auth_headers, post, post2):
     response = client.get(f'/{Config.VERSION}/posts/',
                            headers=auth_headers)
     assert response.status_code == 200
-    data = response.json
+    data = response.json["items"]
     assert data[0]["id_post"] == post_id
 
 

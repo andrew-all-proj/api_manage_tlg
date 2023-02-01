@@ -4,9 +4,9 @@ from sqlalchemy import and_
 from webargs import fields
 
 from api.models.media_contents_model import MediaContentModel
-from api.models.posts_model import PostsModel
+from api.models.posts_model import PostsModel, PostsModelAll
 from flask_apispec import marshal_with, doc, use_kwargs
-from api.sсhemas.post_schema import PostSchema, PostCreateSchema
+from api.sсhemas.post_schema import PostSchema, PostCreateSchema, PostSchemaAll
 
 
 def get_post(id_user, id_post):
@@ -15,12 +15,13 @@ def get_post(id_user, id_post):
                                         PostsModel.is_archive == False)).first()
 
 
+
 # /posts/?filters
 @doc(description='Api for posts', tags=['Posts'])
 class PostsListResource(MethodResource):
     @require_token()
     @doc(security=[{"bearerAuth": []}])
-    @marshal_with(PostSchema(many=True), code=200)
+    @marshal_with(PostSchemaAll, code=200)
     @use_kwargs({
         "page": fields.Int(),
         "per_page": fields.Int()}, location="query")
@@ -34,10 +35,15 @@ class PostsListResource(MethodResource):
         if kwargs.get("page"):
             page = kwargs["page"]
 
+        post_model = PostsModelAll
         posts = PostsModel.query.filter(and_(PostsModel.id_user == current_token.scope,
-                                             PostsModel.is_archive == False)). \
-            paginate(page, per_page, error_out=False).items
-        return posts, 200
+                                             PostsModel.is_archive == False))
+        count = posts.count()
+        post_model.total_count = count
+        posts = posts.paginate(page, per_page, error_out=False).items
+        post_model.items = posts
+
+        return post_model, 200
 
 
 # /v1/posts

@@ -8,10 +8,9 @@ from flasgger import Swagger
 from apispec import APISpec
 from flask_apispec.extension import FlaskApiSpec
 from apispec.ext.marshmallow import MarshmallowPlugin
-from werkzeug.security import safe_join
+from flask_cors import CORS
 
 from config import Config
-from marshmallow import fields
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -39,6 +38,7 @@ app.config.update({
 })
 
 api = Api(app)
+cors = CORS(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 ma = Marshmallow(app)

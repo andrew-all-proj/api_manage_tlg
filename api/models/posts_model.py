@@ -23,3 +23,8 @@ class PostsModel(db.Model, ModelDbExt):
     def __init__(self, id_user, text=None):
         self.text = text
         self.id_user = id_user
+
+
+class PostsModelAll:
+    items = None
+    total_count = None
