@@ -31,7 +31,7 @@ api.add_resource(ChannelsSetUserResource,
                  f'/{Config.VERSION}/channels/<int:id_channel>/users/<int:id_user>')  # DELETE, PUT
 
 api.add_resource(MediaListResource,
-                 f'/{Config.VERSION}/media/')  # GET/filter, POST
+                 f'/{Config.VERSION}/media')  # GET/filter, POST
 api.add_resource(MediaResource,
                  f'/{Config.VERSION}/media/<int:id_media>')  # GET PUT
 api.add_resource(MediaDownloadResource,

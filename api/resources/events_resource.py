@@ -4,10 +4,10 @@ from webargs import fields
 
 from api.models.channels_model import UserChannelModel
 from api.models.events_model import EventModel
-from api.models.posts_model import PostsModel
+from api.models.posts_model import PostsModel, PostsModelAll
 from api.resources.channel_resource import get_chanel
 from api.resources.posts_resource import get_post
-from api.sсhemas.events_schema import EventsSchema, EventsCreateSchema, EventsChangeSchema
+from api.sсhemas.events_schema import EventsSchema, EventsCreateSchema, EventsChangeSchema, EventSchemaAll
 from flask_apispec import marshal_with, use_kwargs, doc
 from sqlalchemy import and_
 
@@ -17,7 +17,7 @@ from sqlalchemy import and_
 class EventsListResource(MethodResource):
     @require_token()
     @doc(security=[{"bearerAuth": []}])
-    @marshal_with(EventsSchema(many=True), code=200)
+    @marshal_with(EventSchemaAll, code=200)
     @use_kwargs({
         "date_start": fields.DateTime(),
         "date_stop": fields.DateTime(),
@@ -47,12 +47,15 @@ class EventsListResource(MethodResource):
             date_stop = kwargs["date_stop"]
         if kwargs.get("completed"):
             completed = kwargs["completed"]
+        events_model = PostsModelAll
         events = EventModel.query.filter(and_(EventModel.id_channel == id_channel,
                                               EventModel.date_start > date_start,
                                               EventModel.date_start < date_stop,
-                                              EventModel.completed == completed)). \
-            paginate(page, per_page, error_out=False)
-        return events.items, 200
+                                              EventModel.completed == completed))
+        events_model.total_count = events.count()
+        events_model.items = events.paginate(page, per_page, error_out=False).items
+
+        return events_model, 200
 
 
 # /events/<int:id_event>

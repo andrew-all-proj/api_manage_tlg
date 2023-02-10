@@ -22,6 +22,7 @@ class Config:
     JWT_ISSUER = "Flask_PyJWT"
     JWT_AUTHTYPE = "HS256"
     JWT_SECRET = "SuperSecretKey"
+    JWT_AUTHMAXAGE = 36000
 
     BASE_DIR = BASE_DIR
 

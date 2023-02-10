@@ -135,6 +135,8 @@ class AddMediaToPostResource(MethodResource):
         post = get_post(current_token.scope, id_post)
         if not post:
             return {"error": "post not found"}, 404
+        if not kwargs.get("media"):
+            return {"error": "error key media"}, 404
         for id_media in kwargs["media"]:
             media = MediaContentModel.query.get(id_media)
             if not media:

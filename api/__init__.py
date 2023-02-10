@@ -1,9 +1,9 @@
-from flask import Flask, g, jsonify, send_file
+from flask import Flask, g, jsonify
 from flask_pyjwt import AuthManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
-from flask_restful import Api, Resource
+from flask_restful import Api
 from flasgger import Swagger
 from apispec import APISpec
 from flask_apispec.extension import FlaskApiSpec

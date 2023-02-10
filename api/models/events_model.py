@@ -26,3 +26,8 @@ class EventModel(db.Model, ModelDbExt):
         self.id_message = id_message
         self.completed = completed
         self.published = published
+
+
+class EventModelAll:
+    items = None
+    total_count = None

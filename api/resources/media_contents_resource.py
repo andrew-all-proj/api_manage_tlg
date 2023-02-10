@@ -115,17 +115,20 @@ class MediaResource(MethodResource):
 # /v1/media/download/<id_media>
 @doc(description='Api for media', tags=['Media'])
 class MediaDownloadResource(MethodResource):
-    @require_token()
-    @doc(security=[{"bearerAuth": []}])
+    #@require_token()
+    #@doc(security=[{"bearerAuth": []}])
     @doc(summary='Download media by id')
     @doc(description='Full: Download media by id')
     def get(self, id_media):
-        media = get_media(current_token.scope, id_media)
+        media = MediaContentModel.query.filter(and_(MediaContentModel.id_media == id_media,
+                                               MediaContentModel.is_archive == False)).first()
         if not media:
             return {"error": "Not file"}, 404
         type_media = TypeMediaModel.query.filter_by(id_type_media=media.id_type_media).first()
+        if not os.path.exists(f"{Config.BASE_DIR}/{media.id_user}/{type_media.name_dir}/{media.name_file}"):
+            return {"error": "Not file"}, 404
         return send_file(
-            path_or_file=f"{Config.BASE_DIR}/{current_token.scope}/{type_media.name_dir}/{media.name_file}",
+            path_or_file=f"{Config.BASE_DIR}/{media.id_user}/{type_media.name_dir}/{media.name_file}",
             mimetype="application/octet-stream",
             as_attachment=False,
         )

@@ -34,3 +34,11 @@ class EventsChangeSchema(ma.SQLAlchemySchema):
     id_post = ma.auto_field(required=False)
     date_start = ma.auto_field(required=False)
     date_stop = ma.auto_field(required=False)
+
+
+class EventSchemaAll(ma.SQLAlchemySchema):
+    class Meta:
+        model = EventModel
+
+    total_count = ma.Int(required=False)
+    items = ma.Nested(EventsSchema, many=True)
