@@ -54,7 +54,6 @@ class EventsListResource(MethodResource):
                                               EventModel.completed == completed))
         events_model.total_count = events.count()
         events_model.items = events.paginate(page, per_page, error_out=False).items
-
         return events_model, 200
 
 

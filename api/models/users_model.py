@@ -15,10 +15,11 @@ class UserModel(db.Model, ModelDbExt):
     user_name = db.Column(db.String(30), nullable=False)
     id_telegram = db.Column(db.String(50), unique=True)
     email = db.Column(db.String(50), unique=True, nullable=False, default=False)
+    confirmed = db.Column(db.Boolean, nullable=False, default=False)
     password = db.Column(db.String(128), nullable=False)
-    date_regestration = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now)
+    date_registration = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now)
     data_update = db.Column(db.DateTime, nullable=False, onupdate=datetime.datetime.now, default=datetime.datetime.now)
-    role = db.Column(db.Boolean, nullable=False, default=False)
+    role = db.Column(db.String(30), nullable=False, default="user")
     is_archive = db.Column(db.Boolean, nullable=False, default=False)
     media = db.relationship(MediaContentModel)
     posts = db.relationship(PostsModel)
@@ -38,3 +39,6 @@ class UserModel(db.Model, ModelDbExt):
 
     def verify_password(self, password):
         return pwd_context.verify(password, self.password)
+
+    def confirmed_email(self, res):
+        self.confirmed = res

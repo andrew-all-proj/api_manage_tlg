@@ -1,6 +1,6 @@
 from api import api, app, docs
 #from api.resources.auth_resource import TokenResource
-from api.resources.auth_resource import TokenResource
+from api.resources.auth_resource import TokenResource, ConfirmEmail, SendTokenConfirmEmail
 from api.resources.channel_resource import ChannelsListResource, ChannelsResource, ChannelsSetUserResource
 from api.resources.events_resource import EventsListResource, EventsResource, EventsCreateResource
 from api.resources.media_contents_resource import MediaListResource, MediaResource, MediaDownloadResource
@@ -17,6 +17,10 @@ from api.resources.user_resource import UsersListResource, UserResource
 # Delete --> DELETE
 api.add_resource(TokenResource,
                  f'/{Config.VERSION}/auth')  # POST
+api.add_resource(SendTokenConfirmEmail,
+                 f'/{Config.VERSION}/email/<int:id_user>')  # GET
+api.add_resource(ConfirmEmail,
+                 f'/{Config.VERSION}/email/confirm/<token>')
 
 api.add_resource(UsersListResource,
                  f'/{Config.VERSION}/users')  # GET, POST
@@ -63,6 +67,8 @@ api.add_resource(TagsResource,
                  f'/{Config.VERSION}/tags/<int:id_tag>')  # GET PUT DELETE
 
 docs.register(TokenResource)
+docs.register(SendTokenConfirmEmail)
+docs.register(ConfirmEmail)
 
 docs.register(UserResource)
 docs.register(UsersListResource)
