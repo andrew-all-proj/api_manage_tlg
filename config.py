@@ -1,7 +1,7 @@
 from pathlib import Path
 
 BASE_DIR = Path(__file__).parent
-
+CONTENT_DIR = f'{BASE_DIR}/content_media'
 
 class Config:
     _USER_NAME_DB = "postgres"

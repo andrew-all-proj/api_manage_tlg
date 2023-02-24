@@ -11,7 +11,7 @@ from flask_apispec import marshal_with, use_kwargs, doc
 from api.models.media_contents_model import TypeMediaModel, MediaContentModel
 from api.sсhemas.media_contents_schema import MediaContentsSchema, MediaChangeSchema
 
-from config import Config
+from config import Config, CONTENT_DIR
 
 
 def get_media(id_user, id_media):
@@ -57,16 +57,16 @@ class MediaListResource(MethodResource):
         gen_name = f"{type_media.type_media}_{suffix_name}.{type_media.extension}"
         try:
             file.save(
-                f"{Config.BASE_DIR}/{current_token.scope}/{type_media.name_dir}/{gen_name}")  # file/1/images/12333.jpg
+                f"{CONTENT_DIR}/{current_token.scope}/{type_media.name_dir}/{gen_name}")  # file/1/images/12333.jpg
         except FileNotFoundError:
-            os.makedirs(f"{Config.BASE_DIR}/{current_token.scope}/{type_media.name_dir}")  # create dir
-            file.save(f"{Config.BASE_DIR}/{current_token.scope}/{type_media.name_dir}/{gen_name}")
+            os.makedirs(f"{CONTENT_DIR}/{current_token.scope}/{type_media.name_dir}")  # create dir
+            file.save(f"{CONTENT_DIR}/{current_token.scope}/{type_media.name_dir}/{gen_name}")
         except:
             return {"error": "error save"}, 400
         media = MediaContentModel(id_type_media=type_media.id_type_media, name_file=gen_name,
                                   id_user=current_token.scope)
         if not media.save():
-            os.remove(f"{Config.BASE_DIR}/{current_token.scope}/{type_media.name_dir}/{gen_name}")
+            os.remove(f"{CONTENT_DIR}/{current_token.scope}/{type_media.name_dir}/{gen_name}")
             return {"error": "error save"}, 400
         return media, 201
 
@@ -125,10 +125,10 @@ class MediaDownloadResource(MethodResource):
         if not media:
             return {"error": "Not file"}, 404
         type_media = TypeMediaModel.query.filter_by(id_type_media=media.id_type_media).first()
-        if not os.path.exists(f"{Config.BASE_DIR}/{media.id_user}/{type_media.name_dir}/{media.name_file}"):
+        if not os.path.exists(f"{CONTENT_DIR}/{media.id_user}/{type_media.name_dir}/{media.name_file}"):
             return {"error": "Not file"}, 404
         return send_file(
-            path_or_file=f"{Config.BASE_DIR}/{media.id_user}/{type_media.name_dir}/{media.name_file}",
+            path_or_file=f"{CONTENT_DIR}/{media.id_user}/{type_media.name_dir}/{media.name_file}",
             mimetype="application/octet-stream",
             as_attachment=False,
         )
