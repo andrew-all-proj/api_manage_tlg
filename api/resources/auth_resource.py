@@ -1,17 +1,18 @@
-from flask import request, url_for
-from api import auth_manager
+import flask
+from flask import request, url_for, render_template
+from api import auth_manager, app
 from flask_apispec.views import MethodResource
 from flask_apispec import doc, use_kwargs, marshal_with
 from api.models.auth_model import AuthHistoryModel
 from api.models.users_model import UserModel
 from api.sсhemas.auth_schema import AuthSchema, AutrResponseSchema
 
-
-#/v1/auth
 from service.confirm_email import generate_confirmation_token, confirm_token
 from service.send_email import send_email
+from config import BASE_DIR
 
 
+#/v1/auth
 @doc(description='Api for authentication user', tags=['Authentication'])
 class TokenResource(MethodResource):
     @doc(summary='Get token')
@@ -23,7 +24,7 @@ class TokenResource(MethodResource):
         if not user:
             return {"error": "Invalid login or password"}, 401
         if not user.confirmed:
-            return {"error": "Your email is not verified"}, 401
+            return {"confirm": user.id_user}, 401
         if user.verify_password(password):
             auth_token = auth_manager.auth_token(email, user.id_user)
             auth_history = AuthHistoryModel(id_user=user.id_user, from_is=request.headers["Host"])
@@ -58,7 +59,6 @@ class SendTokenConfirmEmail(MethodResource):
 class ConfirmEmail(MethodResource):
     @doc(summary='GET token with email')
     @doc(description='GET token with email')
-    @marshal_with(AutrResponseSchema, code=200)
     def get(self, token):
         result = confirm_token(token)
         if not result:
@@ -68,6 +68,12 @@ class ConfirmEmail(MethodResource):
             return {"error": "Invalid email"}, 401
         user.confirmed_email(True)
         user.save()
-        return 200
+        response = app.response_class(
+            response=render_template('confirm_email.html'),
+            status=200,
+            mimetype='text/html; charset=utf-8'
+        )
+
+        return response
 
 
