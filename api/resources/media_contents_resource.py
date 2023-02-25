@@ -37,7 +37,7 @@ class MediaListResource(MethodResource):
         if kwargs.get("per_page"):
             per_page = kwargs["per_page"]
         media = MediaContentModel.query.filter(MediaContentModel.id_user == current_token.scope). \
-            paginate(page, per_page, error_out=False).items
+            paginate(page=page, per_page=per_page, error_out=False).items
         return media, 200
 
     @require_token()
