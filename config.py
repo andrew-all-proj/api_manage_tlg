@@ -2,6 +2,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).parent
 CONTENT_DIR = f'{BASE_DIR}/content_media'
+VERSION = "api/v1"
 
 class Config:
     _USER_NAME_DB = "postgres"
@@ -18,7 +19,7 @@ class Config:
     }
     TEST_DATABASE_URI = f"postgresql+psycopg2://{_USER_NAME_DB}:{_PASSWORD_DB}@localhost/db_unit_test"
     LANGUAGES = ['en', 'ru']
-    VERSION = "api/v1"
+    VERSION = VERSION
 
     JWT_ISSUER = "Flask_PyJWT"
     JWT_AUTHTYPE = "HS256"
@@ -30,6 +31,7 @@ class Config:
     BASE_DIR = BASE_DIR
 
 class EmailConfig:
+    BASE_LINK = 'managetlg.com/' + VERSION + '/email/confirm/'
     HOST = 'smtp.gmail.com'
     PORT = 587
     USER = "info.manager.tlg@gmail.com"

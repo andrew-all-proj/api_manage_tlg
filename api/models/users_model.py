@@ -30,7 +30,7 @@ class UserModel(db.Model, ModelDbExt):
     def __init__(self, email, password, user_name, id_telegram=None, is_archive=False):
         self.user_name = user_name
         self.id_telegram = id_telegram
-        self.email = email
+        self.email = email.lower()
         self.is_archive = is_archive
         self.hash_password(password)
 

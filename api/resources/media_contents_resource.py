@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 import os
 
@@ -47,11 +48,13 @@ class MediaListResource(MethodResource):
     @marshal_with(MediaContentsSchema, code=201)
     @use_kwargs({'file': fields.Raw()}, location='files')
     def post(self, **kwarg):
+        logging.info(f"UPLOAD MEDIA")
         file = kwarg.get('file')
         if not file:
             return {"error": "Not file"}, 400
         type_media = TypeMediaModel.query.filter_by(extension=file.content_type.split("/")[1]).first()
         if not type_media:
+            logging.info(f'error type media: {str(file.content_type.split("/")[1])}')
             return {"error": str(file.content_type.split("/")[1])}, 400
         suffix_name = datetime.now().strftime("%y%m%d_%H%M%S")
         gen_name = f"{type_media.type_media}_{suffix_name}.{type_media.extension}"
@@ -67,6 +70,7 @@ class MediaListResource(MethodResource):
                                   id_user=current_token.scope)
         if not media.save():
             os.remove(f"{CONTENT_DIR}/{current_token.scope}/{type_media.name_dir}/{gen_name}")
+            logging.info(f'error save media')
             return {"error": "error save"}, 400
         return media, 201
 

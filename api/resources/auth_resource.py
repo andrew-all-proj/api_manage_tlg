@@ -1,5 +1,9 @@
+import logging
+
 import flask
 from flask import request, url_for, render_template
+
+import config
 from api import auth_manager, app
 from flask_apispec.views import MethodResource
 from flask_apispec import doc, use_kwargs, marshal_with
@@ -20,8 +24,10 @@ class TokenResource(MethodResource):
     @use_kwargs(AuthSchema, location='json')
     @marshal_with(AutrResponseSchema, code=200)
     def post(self, email, password):
-        user = UserModel.query.filter_by(email=email).first()
+        logging.info(f"get token for email: {email}")
+        user = UserModel.query.filter(UserModel.email == email).first()
         if not user:
+            logging.info(f"Invalid email: {email}")
             return {"error": "Invalid login or password"}, 401
         if not user.confirmed:
             return {"confirm": user.id_user}, 401
@@ -31,6 +37,7 @@ class TokenResource(MethodResource):
             auth_history.save()
             #refresh_token = auth_manager.refresh_token(user.id_user)  # добавить функцию!!!!
             return {f"auth_token": auth_token.signed}, 200
+        logging.info(f"Invalid password: {email}")
         return {"error": "Invalid login or password"}, 401
 
 
@@ -41,25 +48,28 @@ class SendTokenConfirmEmail(MethodResource):
     @doc(description='Send email with link for confirmation it')
     @marshal_with(AutrResponseSchema, code=200)
     def get(self, id_user):
+        logging.info(f"confirm email for user: {id_user}")
         user = UserModel.query.filter_by(id_user=id_user).first()
         if not user:
             return {"error": "Invalid id user"}, 401
         token = generate_confirmation_token(user.email)
-        confirm_url = url_for('confirmemail', token=token, _external=True)
+        confirm_url = config.EmailConfig.BASE_LINK + token
         send_email(
-              recipients=['andrew.publik.mail@gmail.com']
+              recipients=[user.email]
             , subject=f"confirm email"
-            , body=f"link confirm email: {confirm_url}"
+            , html=f"Пройдите по ссылке для потверждения email или скопируйте и вставьте в адресную строку браузера: "
+                   f"<a href=www.{confirm_url}> {confirm_url} </a>"
         )
         return 200
 
 
-#/email/<str:token>
+#/email/confirm/<token>
 @doc(description='Api for get token confirm email', tags=['Authentication'])
 class ConfirmEmail(MethodResource):
     @doc(summary='GET token with email')
     @doc(description='GET token with email')
     def get(self, token):
+        logging.info(f"check token for confirm email:")
         result = confirm_token(token)
         if not result:
             return {"error": "token burned"}, 401

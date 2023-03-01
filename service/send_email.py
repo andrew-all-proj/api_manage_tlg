@@ -1,10 +1,11 @@
+import logging
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from config import EmailConfig
 
-
-def send_email(recipients, subject, body, html=None):
+#DONT WORK SIMPEL TEXT BODY
+def send_email(recipients, subject, body=None, html=None):
     PORT_LIST = (25, 587, 465)
 
     FROM = EmailConfig.FROM
@@ -56,7 +57,7 @@ def send_email(recipients, subject, body, html=None):
         server.login(EmailConfig.USER, EmailConfig.PWD)
         server.sendmail(FROM, TO, message)
         server.close()
-        # logger.info("SENT_EMAIL to %s: %s" % (recipients, subject))
+        logging.info("SENT_EMAIL to %s: %s" % (recipients, subject))
     except Exception as ex:
         return ex
     return None

@@ -1,3 +1,5 @@
+import logging
+
 from flask import Flask, g, jsonify
 from flask_pyjwt import AuthManager
 from flask_sqlalchemy import SQLAlchemy
@@ -36,6 +38,11 @@ app.config.update({
     'APISPEC_SWAGGER_URL': '/swagger',  # URI API Doc JSON
     'APISPEC_SWAGGER_UI_URL': '/swagger-ui'  # URI UI of API Doc
 })
+
+gunicorn_logger = logging.getLogger('gunicorn.error')
+app.logger.handlers = gunicorn_logger.handlers
+app.logger.setLevel(gunicorn_logger.level)
+logging.basicConfig(filename='error.log', level=logging.DEBUG)
 
 api = Api(app)
 cors = CORS(app)

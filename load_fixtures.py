@@ -34,7 +34,7 @@ def load_fixture(fixture):
             model_object = model(**record)
             result = model_object.save()
             if result:
-                coun= coun + 1
+                coun=coun + 1
     print(f"add {coun}")
 
 
