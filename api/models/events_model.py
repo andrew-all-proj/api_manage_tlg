@@ -15,6 +15,7 @@ class EventModel(db.Model, ModelDbExt):
     date_stop = db.Column(db.DateTime)
     completed = db.Column(db.Boolean, nullable=False, default=False)
     published = db.Column(db.Boolean, nullable=False, default=False)
+    __table_args__ = (db.UniqueConstraint('id_post', 'date_start', name='_id_post_date_start_uc'),)
     post = db.relationship(PostsModel, backref='posts', uselist=False, lazy='subquery')
 
     def __init__(self, id_post, id_channel, date_start, date_stop=None, id_message=None, completed=False,

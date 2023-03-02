@@ -36,5 +36,5 @@ class ChannelModel(db.Model, ModelDbExt):
     def __init__(self, id_user_admin, name_channel, link_channel, id_telegram):
         self.name_channel = name_channel
         self.link_channel = link_channel
-        self.id_telegram = id_telegram
+        self.id_telegram = self.id_split(id_telegram)
         self.id_user_admin = id_user_admin

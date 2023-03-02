@@ -26,3 +26,7 @@ class ModelDbExt:
 
     def to_archive(self):
         self.is_archive = True
+
+    def id_split(self, id):
+        if (not id): return id
+        return "".join(str(id).split()) or id

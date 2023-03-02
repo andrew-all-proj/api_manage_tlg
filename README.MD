@@ -24,7 +24,7 @@
 
 # Миграции
 1. Активировать миграции: flask db init
-2. Создать миграцию: flask db migrate -m "comment"
+2. Создать миграцию: flask db migrate -m "start"
 3. Применить миграции: flask db upgrade
 
 #Загрузка fixture
