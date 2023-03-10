@@ -40,7 +40,7 @@ class PostsListResource(MethodResource):
                                              PostsModel.is_archive == False))
         count = posts.count()
         post_model.total_count = count
-        posts = posts.paginate(page=page, per_page=per_page, error_out=False).items
+        posts = posts.order_by(PostsModel.date_create.desc()).paginate(page=page, per_page=per_page, error_out=False).items
         post_model.items = posts
 
         return post_model, 200

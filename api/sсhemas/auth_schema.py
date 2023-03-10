@@ -12,3 +12,5 @@ class AuthSchema(ma.SQLAlchemySchema):
 
 class AutrResponseSchema(ma.SQLAlchemySchema):
     auth_token = ma.Str(required=True)
+    id_user = ma.Int(required=True)
+    user_name = ma.Str(required=True)

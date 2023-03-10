@@ -53,7 +53,7 @@ class EventsListResource(MethodResource):
                                               EventModel.date_start < date_stop,
                                               EventModel.completed == completed))
         events_model.total_count = events.count()
-        events_model.items = events.paginate(page=page, per_page=per_page, error_out=False).items
+        events_model.items = events.order_by(EventModel.date_start.desc()).paginate(page=page, per_page=per_page, error_out=False).items
         return events_model, 200
 
 

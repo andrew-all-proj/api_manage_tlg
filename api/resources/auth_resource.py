@@ -36,7 +36,7 @@ class TokenResource(MethodResource):
             auth_history = AuthHistoryModel(id_user=user.id_user, from_is=request.headers["Host"])
             auth_history.save()
             #refresh_token = auth_manager.refresh_token(user.id_user)  # добавить функцию!!!!
-            return {f"auth_token": auth_token.signed}, 200
+            return {f"auth_token": auth_token.signed, "id_user": user.id_user, "user_name": user.user_name}, 200
         logging.info(f"Invalid password: {email}")
         return {"error": "Invalid login or password"}, 401
 
