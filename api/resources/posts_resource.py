@@ -71,7 +71,10 @@ class PostsResource(MethodResource):
     @doc(summary='Get post by id')
     @doc(description='Full: Get post by id')
     def get(self, id_post):
-        return get_post(current_token.scope, id_post), 200
+        post = get_post(current_token.scope, id_post)
+        if not post:
+            return {"error": "post not found"}, 404
+        return post, 200
 
     @require_token()
     @doc(security=[{"bearerAuth": []}])

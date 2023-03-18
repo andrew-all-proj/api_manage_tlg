@@ -5,7 +5,8 @@ from api.resources.channel_resource import ChannelsListResource, ChannelsResourc
 from api.resources.events_resource import EventsListResource, EventsResource, EventsCreateResource
 from api.resources.media_contents_resource import MediaListResource, MediaResource, MediaDownloadResource
 from api.resources.posts_resource import PostsListResource, AddMediaToPostResource, PostsResource, PostsCreateResource
-from api.resources.tags_resource import TagsListResource, MediaSetTagsResource, TagsResource, TagsCreateResource
+from api.resources.tags_resource import TagsListResource, MediaSetTagsResource, TagsResource, TagsCreateResource, \
+    TagsMediaIdResource
 from config import Config
 from api.resources.user_resource import UsersListResource, UserResource
 
@@ -65,6 +66,8 @@ api.add_resource(TagsCreateResource,
                  f'/{Config.VERSION}/tags')  # POST
 api.add_resource(TagsResource,
                  f'/{Config.VERSION}/tags/<int:id_tag>')  # GET PUT DELETE
+api.add_resource(TagsMediaIdResource,
+                 f'/{Config.VERSION}/tags/media/<int:id_media>')  # GET PUT DELETE
 
 docs.register(TokenResource)
 docs.register(SendTokenConfirmEmail)
@@ -94,6 +97,7 @@ docs.register(TagsListResource)
 docs.register(TagsResource)
 docs.register(MediaSetTagsResource)
 docs.register(TagsCreateResource)
+docs.register(TagsMediaIdResource)
 
 if __name__ == '__main__':
     app.run(debug=Config.DEBUG, port=Config.PORT)

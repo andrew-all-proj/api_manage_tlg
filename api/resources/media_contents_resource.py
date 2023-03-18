@@ -52,7 +52,8 @@ class MediaListResource(MethodResource):
         file = kwarg.get('file')
         if not file:
             return {"error": "Not file"}, 400
-        type_media = TypeMediaModel.query.filter_by(extension=file.content_type.split("/")[1]).first()
+        root, ext = os.path.splitext(file.filename)
+        type_media = TypeMediaModel.query.filter_by(extension=ext.lstrip('.').lower()).first()
         if not type_media:
             logging.info(f'error type media: {str(file.content_type.split("/")[1])}')
             return {"error": str(file.content_type.split("/")[1])}, 400

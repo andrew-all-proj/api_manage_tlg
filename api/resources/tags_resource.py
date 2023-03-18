@@ -163,3 +163,22 @@ class MediaSetTagsResource(MethodResource):
         if not media.save():
             return {"error": "save in bd"}, 400
         return media, 200
+
+
+# /tags/media/<id_media>
+@doc(description='Api for tags', tags=['Tags'])
+class TagsMediaIdResource(MethodResource):
+    @require_token()
+    @doc(security=[{"bearerAuth": []}])
+    @marshal_with(TagSchema(many=True), code=200)
+    @doc(summary='Get all tags for media')
+    @doc(description='Full: Get all tags for media')
+    def get(self, id_media):
+        media = MediaContentModel.query.filter(and_(MediaContentModel.id_user == current_token.scope,
+                                                    MediaContentModel.id_media == id_media,
+                                                    MediaContentModel.is_archive == False)).first()
+        if not media:
+            return {"error": "media not found"}, 404
+        if not media.save():
+            return {"error": "save in bd"}, 400
+        return media.tags, 200
