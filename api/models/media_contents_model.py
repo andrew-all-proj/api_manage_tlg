@@ -33,3 +33,7 @@ class MediaContentModel(db.Model, ModelDbExt):
         self.name_file = name_file
         self.id_user = id_user
         self.description = description
+
+class MediaModelAll:
+    items = None
+    total_count = None

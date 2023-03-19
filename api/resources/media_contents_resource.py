@@ -9,8 +9,8 @@ from sqlalchemy import and_
 from webargs import fields
 from flask_apispec import marshal_with, use_kwargs, doc
 
-from api.models.media_contents_model import TypeMediaModel, MediaContentModel
-from api.sсhemas.media_contents_schema import MediaContentsSchema, MediaChangeSchema
+from api.models.media_contents_model import TypeMediaModel, MediaContentModel, MediaModelAll
+from api.sсhemas.media_contents_schema import MediaContentsSchema, MediaChangeSchema, MediaSchemaAll
 
 from config import Config, CONTENT_DIR
 
@@ -26,20 +26,32 @@ def get_media(id_user, id_media):
 class MediaListResource(MethodResource):
     @require_token()
     @doc(security=[{"bearerAuth": []}])
-    @marshal_with(MediaContentsSchema(many=True), code=200)
-    @use_kwargs({"page": fields.Int(), "per_page": fields.Int()}, location="query")
+    @marshal_with(MediaSchemaAll, code=200)
+    @use_kwargs({"page": fields.Int(), "per_page": fields.Int(),
+                 "is_archive": fields.Boolean(), "last_time_used": fields.DateTime()}, location="query")
     @doc(summary='Get all media')
     @doc(description='Full: Get all media')
     def get(self, **kwargs):
         page = 1
         per_page = 3
+        is_arhive = False
         if kwargs.get("page"):
             page = kwargs["page"]
         if kwargs.get("per_page"):
             per_page = kwargs["per_page"]
-        media = MediaContentModel.query.filter(MediaContentModel.id_user == current_token.scope). \
-            paginate(page=page, per_page=per_page, error_out=False).items
-        return media, 200
+        if kwargs.get("is_archive"):
+            is_arhive = kwargs["is_archive"]
+        media_model = MediaModelAll
+        media = MediaContentModel.query.filter(and_(MediaContentModel.id_user == current_token.scope,
+                                                    MediaContentModel.is_archive == is_arhive))
+        if kwargs.get("last_time_used"):
+            last_time_used = kwargs["last_time_used"]
+            media = media.filter(MediaContentModel.last_time_used < last_time_used)
+        count = media.count()
+        media_model.total_count = count
+        media = media.paginate(page=page, per_page=per_page, error_out=False).items
+        media_model.items = media
+        return media_model, 200
 
     @require_token()
     @doc(security=[{"bearerAuth": []}])

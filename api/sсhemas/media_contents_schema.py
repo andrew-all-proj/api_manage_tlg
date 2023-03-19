@@ -28,3 +28,10 @@ class MediaChangeSchema(ma.SQLAlchemySchema):
         model = TypeMediaModel
 
     description = ma.Str(required=True)
+
+class MediaSchemaAll(ma.SQLAlchemySchema):
+    class Meta:
+        model = MediaContentsSchema
+
+    total_count = ma.Int(required=False)
+    items = ma.Nested(MediaContentsSchema, many=True)
