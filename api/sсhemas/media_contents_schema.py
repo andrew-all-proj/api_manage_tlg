@@ -11,6 +11,7 @@ class MediaContentsSchema(ma.SQLAlchemySchema):
     id_media = ma.auto_field(required=True)
     type_media = ma.Nested(TypeMediaSchema)
     date_download = ma.auto_field(required=True)
+    last_time_used = ma.auto_field(required=True)
     description = ma.auto_field()
     tags = ma.Nested(TagSchema, many=True)
 
@@ -31,7 +32,7 @@ class MediaChangeSchema(ma.SQLAlchemySchema):
 
 class MediaSchemaAll(ma.SQLAlchemySchema):
     class Meta:
-        model = MediaContentsSchema
+        model = MediaContentModel
 
     total_count = ma.Int(required=False)
     items = ma.Nested(MediaContentsSchema, many=True)

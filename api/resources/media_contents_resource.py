@@ -9,10 +9,15 @@ from sqlalchemy import and_
 from webargs import fields
 from flask_apispec import marshal_with, use_kwargs, doc
 
+from api import db
+from api.models.channels_model import ChannelModel
+from api.models.events_model import EventModel
 from api.models.media_contents_model import TypeMediaModel, MediaContentModel, MediaModelAll
+from api.models.posts_model import PostsModel, media as PostsMediaModel
 from api.sсhemas.media_contents_schema import MediaContentsSchema, MediaChangeSchema, MediaSchemaAll
 
 from config import Config, CONTENT_DIR
+from sqlalchemy.orm import aliased
 
 
 def get_media(id_user, id_media):
@@ -28,13 +33,16 @@ class MediaListResource(MethodResource):
     @doc(security=[{"bearerAuth": []}])
     @marshal_with(MediaSchemaAll, code=200)
     @use_kwargs({"page": fields.Int(), "per_page": fields.Int(),
-                 "is_archive": fields.Boolean(), "last_time_used": fields.DateTime()}, location="query")
+                 "is_archive": fields.Boolean(), "last_time_used": fields.DateTime(),
+                "published": fields.Boolean(), "id_channel": fields.Int(),
+                 "limit": fields.Int()}, location="query")
     @doc(summary='Get all media')
     @doc(description='Full: Get all media')
     def get(self, **kwargs):
         page = 1
         per_page = 3
         is_arhive = False
+        limit = 1000
         if kwargs.get("page"):
             page = kwargs["page"]
         if kwargs.get("per_page"):
@@ -42,16 +50,31 @@ class MediaListResource(MethodResource):
         if kwargs.get("is_archive"):
             is_arhive = kwargs["is_archive"]
         media_model = MediaModelAll
+        if kwargs.get("limit"):
+            limit = kwargs["limit"]
         media = MediaContentModel.query.filter(and_(MediaContentModel.id_user == current_token.scope,
                                                     MediaContentModel.is_archive == is_arhive))
         if kwargs.get("last_time_used"):
             last_time_used = kwargs["last_time_used"]
             media = media.filter(MediaContentModel.last_time_used < last_time_used)
-        count = media.count()
-        media_model.total_count = count
-        media = media.paginate(page=page, per_page=per_page, error_out=False).items
-        media_model.items = media
+        if kwargs.get("published"):
+            media_not_used = db.session.query(MediaContentModel.id_media). \
+                outerjoin(PostsMediaModel, MediaContentModel.id_media == PostsMediaModel.c.id_media). \
+                outerjoin(PostsModel, PostsMediaModel.c.id_post == PostsModel.id_post). \
+                outerjoin(EventModel, EventModel.id_post == PostsModel.id_post). \
+                outerjoin(ChannelModel, ChannelModel.id_channel == EventModel.id_channel). \
+                filter(MediaContentModel.id_user == current_token.scope). \
+                filter(PostsMediaModel.c.id_media.is_(None)). \
+                distinct()
+            media = media.filter(MediaContentModel.id_media.in_(media_not_used))
+        subq = media.limit(limit).subquery()
+        ua = aliased(MediaContentModel, subq)                                    #Make subquery bcs don't work limit
+        media_model.total_count = 100
+        media = db.session.query(ua)
+        media_model.total_count = media.count()
+        media_model.items = media.paginate(page=page, per_page=per_page, error_out=False).items
         return media_model, 200
+
 
     @require_token()
     @doc(security=[{"bearerAuth": []}])
