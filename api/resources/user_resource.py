@@ -70,18 +70,20 @@ class UserResource(MethodResource):
     @doc(description='Full: Change data user by id')
     @doc(summary='Change data user by id')
     def put(self, user_id, **kwargs):
-        user = get_object_or_404(UserModel, user_id)
+        user = UserModel.query.get(user_id)
         if not user:
             return {"error": "id user is not exist"}, 400
         if user.is_archive:
             return {"error": "user in archive"}, 400
         if user.id_user != current_token.scope:
             return {"error": "You can change only own profile"}, 400
+        if kwargs.get('password') or kwargs.get('new_password'):
+            if not user.verify_password(kwargs.get('password')):
+                return {"error": "error password"}, 400
+            user.password = user.hash_password(kwargs.get('new_password'))
         user.user_name = kwargs.get('user_name') or user.user_name
         user.id_telegram = kwargs.get('id_telegram') or user.id_telegram
         user.email = kwargs.get('email') or user.email
-        if kwargs.get('password'):
-            user.hash_password(kwargs.get('password'))
         if not user.save():
             return {"error": "update data base"}, 400
         return user, 200

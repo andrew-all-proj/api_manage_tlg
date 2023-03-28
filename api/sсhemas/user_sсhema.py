@@ -20,6 +20,7 @@ class UserRequestSchema(ma.SQLAlchemySchema):
 
     user_name = ma.auto_field(required=False, validate=[validate.Length(min=3, max=36)])
     password = ma.auto_field(required=False, validate=[validate.Length(min=6, max=36)])
+    new_password = ma.Str(required=False, validate=[validate.Length(min=6, max=36)])
     email = ma.Email(required=False, validate=[validate.Length(min=3, max=36)])
     id_telegram = ma.auto_field(required=False, validate=[validate.Length(min=6, max=36)])
 
@@ -31,3 +32,5 @@ class UserLisrSchema(ma.SQLAlchemySchema):
     id_user = ma.auto_field(required=True)
     user_name = ma.auto_field(required=True)
     is_archive = ma.auto_field(required=True)
+    id_telegram = ma.auto_field(required=True)
+    email = ma.Email(required=True)

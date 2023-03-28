@@ -32,10 +32,12 @@ class UserModel(db.Model, ModelDbExt):
         self.id_telegram = self.id_split(id_telegram)
         self.email = email.lower()
         self.is_archive = is_archive
-        self.hash_password(password)
+        self.password = self.hash_password(password)
+
 
     def hash_password(self, password):
-        self.password = pwd_context.hash(password)
+        return pwd_context.hash(password)
+
 
     def verify_password(self, password):
         return pwd_context.verify(password, self.password)
