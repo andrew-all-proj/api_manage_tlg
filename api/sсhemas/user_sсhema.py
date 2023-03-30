@@ -19,7 +19,7 @@ class UserRequestSchema(ma.SQLAlchemySchema):
         model = UserModel
 
     user_name = ma.auto_field(required=False, validate=[validate.Length(min=3, max=36)])
-    password = ma.auto_field(required=False, validate=[validate.Length(min=6, max=36)])
+    password = ma.auto_field(required=False, validate=[validate.Length(min=5, max=36)])
     new_password = ma.Str(required=False, validate=[validate.Length(min=6, max=36)])
     email = ma.Email(required=False, validate=[validate.Length(min=3, max=36)])
     id_telegram = ma.auto_field(required=False, validate=[validate.Length(min=6, max=36)])

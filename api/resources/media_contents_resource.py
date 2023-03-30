@@ -13,6 +13,7 @@ from api import db
 from api.models.channels_model import ChannelModel
 from api.models.events_model import EventModel
 from api.models.media_contents_model import TypeMediaModel, MediaContentModel, MediaModelAll
+from api.models.media_tags_model import TagModel, tags
 from api.models.posts_model import PostsModel, media as PostsMediaModel
 from api.sсhemas.media_contents_schema import MediaContentsSchema, MediaChangeSchema, MediaSchemaAll
 
@@ -35,7 +36,7 @@ class MediaListResource(MethodResource):
     @use_kwargs({"page": fields.Int(), "per_page": fields.Int(),
                  "is_archive": fields.Boolean(), "last_time_used": fields.DateTime(),
                 "published": fields.Boolean(), "id_channel": fields.Int(),
-                 "limit": fields.Int()}, location="query")
+                 "limit": fields.Int(), "list_tags": fields.Str()}, location="query")
     @doc(summary='Get all media')
     @doc(description='Full: Get all media')
     def get(self, **kwargs):
@@ -61,12 +62,17 @@ class MediaListResource(MethodResource):
             media_not_used = db.session.query(MediaContentModel.id_media). \
                 outerjoin(PostsMediaModel, MediaContentModel.id_media == PostsMediaModel.c.id_media). \
                 outerjoin(PostsModel, PostsMediaModel.c.id_post == PostsModel.id_post). \
-                outerjoin(EventModel, EventModel.id_post == PostsModel.id_post). \
-                outerjoin(ChannelModel, ChannelModel.id_channel == EventModel.id_channel). \
                 filter(MediaContentModel.id_user == current_token.scope). \
                 filter(PostsMediaModel.c.id_media.is_(None)). \
                 distinct()
             media = media.filter(MediaContentModel.id_media.in_(media_not_used))
+        if kwargs.get("list_tags"):
+            list_tags = [int(num) for num in kwargs["list_tags"].split(",")]
+            query_list_in_tags = db.session.query(MediaContentModel.id_media) \
+                .join(tags, MediaContentModel.id_media == tags.c.id_media) \
+                .join(TagModel, TagModel.id_tag == tags.c.id_tag) \
+                .filter(TagModel.id_tag.in_(list_tags))
+            media = media.filter(MediaContentModel.id_media.in_(query_list_in_tags))
         subq = media.limit(limit).subquery()
         ua = aliased(MediaContentModel, subq)                                    #Make subquery bcs don't work limit
         media_model.total_count = 100
@@ -92,8 +98,11 @@ class MediaListResource(MethodResource):
         if not type_media:
             logging.info(f'error type media: {str(file.content_type.split("/")[1])}')
             return {"error": str(file.content_type.split("/")[1])}, 400
-        suffix_name = datetime.now().strftime("%y%m%d_%H%M%S")
-        gen_name = f"{type_media.type_media}_{suffix_name}.{type_media.extension}"
+        if (type_media.type_media == 'audio'):
+            gen_name = f"{root}.{type_media.extension}"
+        else:
+            suffix_name = datetime.now().strftime("%y%m%d_%H%M%S")
+            gen_name = f"{type_media.type_media}_{suffix_name}.{type_media.extension}"
         try:
             file.save(
                 f"{CONTENT_DIR}/{current_token.scope}/{type_media.name_dir}/{gen_name}")  # file/1/images/12333.jpg

@@ -24,7 +24,10 @@ class PostsListResource(MethodResource):
     @marshal_with(PostSchemaAll, code=200)
     @use_kwargs({
         "page": fields.Int(),
-        "per_page": fields.Int()}, location="query")
+        "per_page": fields.Int(),
+        "data_time_start": fields.DateTime(),
+        "data_time_stop": fields.DateTime(),
+        "reverse_sort": fields.Boolean()}, location="query")
     @doc(summary='Get all posts')
     @doc(description='Full: Get all posts')
     def get(self, **kwargs):
@@ -38,9 +41,17 @@ class PostsListResource(MethodResource):
         post_model = PostsModelAll
         posts = PostsModel.query.filter(and_(PostsModel.id_user == current_token.scope,
                                              PostsModel.is_archive == False))
+        if kwargs.get("data_time_start"):
+            posts = posts.filter(PostsModel.date_create > kwargs["data_time_start"])
+        if kwargs.get("data_time_stop"):
+            posts = posts.filter(PostsModel.date_create < kwargs["data_time_stop"])
         count = posts.count()
         post_model.total_count = count
-        posts = posts.order_by(PostsModel.date_create.desc()).paginate(page=page, per_page=per_page, error_out=False).items
+        if kwargs.get("reverse_sort"):
+            posts = posts.order_by(PostsModel.date_create.asc())
+        else:
+            posts = posts.order_by(PostsModel.date_create.desc())
+        posts = posts.paginate(page=page, per_page=per_page, error_out=False).items
         post_model.items = posts
 
         return post_model, 200

@@ -42,7 +42,7 @@ class UserResource(MethodResource):
     @doc(description='Full: Get User by id')
     @doc(summary='Get User by id')
     def get(self, user_id):
-        user = get_object_or_404(UserModel, user_id)
+        user = get_object_or_404(UserModel, current_token.scope)
         if not user or user.is_archive:
             return {}, 200
         return user, 200
@@ -52,7 +52,7 @@ class UserResource(MethodResource):
     @doc(description='Full: You can delete only own profile')
     @doc(summary='Delete User by id')
     def delete(self, user_id):
-        user = get_object_or_404(UserModel, user_id)
+        user = get_object_or_404(UserModel, current_token.scope)
         if not user:
             return {"error": "id user is not exist"}, 400
         if user.is_archive:
@@ -70,7 +70,7 @@ class UserResource(MethodResource):
     @doc(description='Full: Change data user by id')
     @doc(summary='Change data user by id')
     def put(self, user_id, **kwargs):
-        user = UserModel.query.get(user_id)
+        user = UserModel.query.get(current_token.scope)
         if not user:
             return {"error": "id user is not exist"}, 400
         if user.is_archive:

@@ -1,5 +1,7 @@
 import click
 import json
+
+from api import app
 from api.models.channels_model import ChannelModel, UserChannelModel
 from api.models.events_model import EventModel
 from api.models.media_contents_model import TypeMediaModel, MediaContentModel
@@ -13,6 +15,7 @@ from sqlalchemy.exc import IntegrityError
 @click.command
 @click.option('--fixture', help='fixture name .json')
 def load_fixture(fixture):
+    app.app_context().push()
     path_to_fixture = BASE_DIR / "fixtures" / fixture
     models = {
         "UserModel": UserModel,
