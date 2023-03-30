@@ -41,10 +41,10 @@ class PostsListResource(MethodResource):
         post_model = PostsModelAll
         posts = PostsModel.query.filter(and_(PostsModel.id_user == current_token.scope,
                                              PostsModel.is_archive == False))
-        if kwargs.get("data_time_start"):
-            posts = posts.filter(PostsModel.date_create > kwargs["data_time_start"])
-        if kwargs.get("data_time_stop"):
-            posts = posts.filter(PostsModel.date_create < kwargs["data_time_stop"])
+        if kwargs.get("date_time_start"):
+            posts = posts.filter(PostsModel.date_create > kwargs["date_time_start"])
+        if kwargs.get("date_time_stop"):
+            posts = posts.filter(PostsModel.date_create < kwargs["date_time_stop"])
         count = posts.count()
         post_model.total_count = count
         if kwargs.get("reverse_sort"):

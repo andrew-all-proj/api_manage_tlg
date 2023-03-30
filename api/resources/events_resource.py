@@ -19,19 +19,18 @@ class EventsListResource(MethodResource):
     @doc(security=[{"bearerAuth": []}])
     @marshal_with(EventSchemaAll, code=200)
     @use_kwargs({
-        "date_start": fields.DateTime(),
-        "date_stop": fields.DateTime(),
+        "date_time_start": fields.DateTime(),
+        "date_time_stop": fields.DateTime(),
         "page": fields.Int(),
         "per_page": fields.Int(),
-        "completed": fields.Boolean()}, location="query")
+        "completed": fields.Boolean(),
+        "reverse_sort": fields.Boolean()}, location="query")
     @doc(summary='Get all events and sort filters')
     @doc(description='Full: Get all events and sort filters')
     def get(self, id_channel, **kwargs):
 
         page = 1
         per_page = 100
-        date_start = '2000-01-01 13:00:00.00'
-        date_stop = '2050-01-01 13:00:00.00'
         completed = False
 
         channel = get_chanel(current_token.scope, id_channel)
@@ -41,17 +40,19 @@ class EventsListResource(MethodResource):
             per_page = kwargs["per_page"]
         if kwargs.get("page"):
             page = kwargs["page"]
-        if kwargs.get("date_start"):
-            date_start = kwargs["date_start"]
-        if kwargs.get("date_stop"):
-            date_stop = kwargs["date_stop"]
         if kwargs.get("completed"):
             completed = kwargs["completed"]
         events_model = PostsModelAll
         events = EventModel.query.filter(and_(EventModel.id_channel == id_channel,
-                                              EventModel.date_start > date_start,
-                                              EventModel.date_start < date_stop,
                                               EventModel.completed == completed))
+        if kwargs.get("date_time_start"):
+            events = events.filter(EventModel.date_start > kwargs["date_time_start"])
+        if kwargs.get("date_time_stop"):
+            events = events.filter(EventModel.date_start < kwargs["date_time_stop"])
+        if kwargs.get("reverse_sort"):
+            events = events.order_by(EventModel.date_start.asc())
+        else:
+            events = events.order_by(EventModel.date_start.desc())
         events_model.total_count = events.count()
         events_model.items = events.order_by(EventModel.date_start.desc()).paginate(page=page, per_page=per_page, error_out=False).items
         return events_model, 200

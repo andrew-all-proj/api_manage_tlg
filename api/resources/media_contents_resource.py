@@ -33,10 +33,14 @@ class MediaListResource(MethodResource):
     @require_token()
     @doc(security=[{"bearerAuth": []}])
     @marshal_with(MediaSchemaAll, code=200)
-    @use_kwargs({"page": fields.Int(), "per_page": fields.Int(),
-                 "is_archive": fields.Boolean(), "last_time_used": fields.DateTime(),
-                "published": fields.Boolean(), "id_channel": fields.Int(),
-                 "limit": fields.Int(), "list_tags": fields.Str()}, location="query")
+    @use_kwargs({"page": fields.Int(),
+                 "per_page": fields.Int(),
+                 "is_archive": fields.Boolean(),
+                 "last_time_used": fields.DateTime(),
+                 "published": fields.Boolean(),
+                 "id_channel": fields.Int(),
+                 "limit": fields.Int(),
+                 "list_tags": fields.Str()}, location="query")
     @doc(summary='Get all media')
     @doc(description='Full: Get all media')
     def get(self, **kwargs):
