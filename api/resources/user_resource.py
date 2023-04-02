@@ -8,6 +8,9 @@ from helpers.shortscuts import get_object_or_404
 
 
 # /v1/users
+from service.decodeBase64 import decode_base64
+
+
 @doc(description='Api for user.', tags=['Users'])
 class UsersListResource(MethodResource):
     @require_token()
@@ -27,6 +30,7 @@ class UsersListResource(MethodResource):
         user = UserModel.query.filter_by(email=kwargs["email"]).first()
         if user:
             return {"error": "email is exist"}, 400
+        kwargs["password"] = decode_base64(kwargs["password"])
         user = UserModel(**kwargs)
         if not user.save():
             return {"error": "update data base"}, 400

@@ -25,8 +25,8 @@ class PostsListResource(MethodResource):
     @use_kwargs({
         "page": fields.Int(),
         "per_page": fields.Int(),
-        "data_time_start": fields.DateTime(),
-        "data_time_stop": fields.DateTime(),
+        "date_time_start": fields.DateTime(),
+        "date_time_stop": fields.DateTime(),
         "reverse_sort": fields.Boolean()}, location="query")
     @doc(summary='Get all posts')
     @doc(description='Full: Get all posts')

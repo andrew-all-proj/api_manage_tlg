@@ -12,8 +12,8 @@ from api.models.users_model import UserModel
 from api.sсhemas.auth_schema import AuthSchema, AutrResponseSchema
 
 from service.confirm_email import generate_confirmation_token, confirm_token
+from service.decodeBase64 import decode_base64
 from service.send_email import send_email
-from config import BASE_DIR
 
 
 #/v1/auth
@@ -25,6 +25,7 @@ class TokenResource(MethodResource):
     @marshal_with(AutrResponseSchema, code=200)
     def post(self, email, password):
         logging.info(f"get token for email: {email}")
+        password = decode_base64(password)
         user = UserModel.query.filter(UserModel.email == email).first()
         if not user:
             logging.info(f"Invalid email: {email}")
@@ -33,7 +34,7 @@ class TokenResource(MethodResource):
             return {"confirm": user.id_user}, 401
         if user.verify_password(password):
             auth_token = auth_manager.auth_token(email, user.id_user)
-            auth_history = AuthHistoryModel(id_user=user.id_user, from_is=request.headers["Host"])
+            auth_history = AuthHistoryModel(id_user=user.id_user, from_is=request.host)
             auth_history.save()
             #refresh_token = auth_manager.refresh_token(user.id_user)  # добавить функцию!!!!
             return {f"auth_token": auth_token.signed, "id_user": user.id_user, "user_name": user.user_name}, 200
