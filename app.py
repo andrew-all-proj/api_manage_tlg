@@ -3,10 +3,12 @@ from api import api, app, docs
 from api.resources.auth_resource import TokenResource, ConfirmEmail, SendTokenConfirmEmail
 from api.resources.channel_resource import ChannelsListResource, ChannelsResource, ChannelsSetUserResource
 from api.resources.events_resource import EventsListResource, EventsResource, EventsCreateResource
+from api.resources.feedback_bots_resource import FeedBackBotResource, FeedBackBotsListResource
 from api.resources.media_contents_resource import MediaListResource, MediaResource, MediaDownloadResource
 from api.resources.posts_resource import PostsListResource, AddMediaToPostResource, PostsResource, PostsCreateResource
 from api.resources.tags_resource import TagsListResource, MediaSetTagsResource, TagsResource, TagsCreateResource, \
     TagsMediaIdResource
+from api.resources.users_to_feedback_resource import FeedBackBotsUsersListResource, FeedBackBotsUserResource
 from config import Config
 from api.resources.user_resource import UsersListResource, UserResource
 
@@ -69,6 +71,17 @@ api.add_resource(TagsResource,
 api.add_resource(TagsMediaIdResource,
                  f'/{Config.VERSION}/tags/media/<int:id_media>')  # GET PUT DELETE
 
+api.add_resource(FeedBackBotsListResource,
+                 f'/{Config.VERSION}/feedback_bots')  # GET(ALL) POST
+api.add_resource(FeedBackBotResource,
+                 f'/{Config.VERSION}/feedback_bots/<int:id_feedback_bot>')  # GET PUT DELETE
+
+api.add_resource(FeedBackBotsUsersListResource,
+                 f'/{Config.VERSION}/feedback_bots/users')  # GET(ALL) POST
+api.add_resource(FeedBackBotsUserResource,
+                 f'/{Config.VERSION}/feedback_bots/users/<int:id_users_to_feedback_bot>')  # GET PUT DELETE
+
+
 docs.register(TokenResource)
 docs.register(SendTokenConfirmEmail)
 docs.register(ConfirmEmail)
@@ -98,6 +111,12 @@ docs.register(TagsResource)
 docs.register(MediaSetTagsResource)
 docs.register(TagsCreateResource)
 docs.register(TagsMediaIdResource)
+
+docs.register(FeedBackBotsListResource)
+docs.register(FeedBackBotResource)
+
+docs.register(FeedBackBotsUsersListResource)
+docs.register(FeedBackBotsUserResource)
 
 if __name__ == '__main__':
     app.run(debug=Config.DEBUG, port=Config.PORT)
