@@ -1,7 +1,5 @@
-from marshmallow import validate
-
 from api import ma
-from api.models.feedback_bots_model import FeedbackBotsModel
+from api.models.feedback_bots.feedback_bots_model import FeedbackBotsModel
 from api.sсhemas.users_to_feedback_schema import UsersToFeedbackBotSchema
 
 

@@ -1,8 +1,7 @@
 from flask_apispec.views import MethodResource
 from flask_pyjwt import require_token, current_token
-from api.models.feedback_bots_model import UsersToFeedbackBot, FeedbackBotsModel
+from api.models.feedback_bots.feedback_bots_model import UsersToFeedbackBot, FeedbackBotsModel
 from flask_apispec import marshal_with, use_kwargs, doc
-from api.sсhemas.feedback_bots_schema import FeedbackBotsSchema, FeedbackBotsPostSchema
 from sqlalchemy import and_
 
 from api.sсhemas.users_to_feedback_schema import UsersToFeedbackBotPostSchema, UsersToFeedbackBotSchema

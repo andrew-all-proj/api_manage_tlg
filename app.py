@@ -1,3 +1,5 @@
+import logging
+
 from api import api, app, docs
 #from api.resources.auth_resource import TokenResource
 from api.resources.auth_resource import TokenResource, ConfirmEmail, SendTokenConfirmEmail
@@ -118,5 +120,6 @@ docs.register(FeedBackBotResource)
 docs.register(FeedBackBotsUsersListResource)
 docs.register(FeedBackBotsUserResource)
 
+logging.info("Start app")
 if __name__ == '__main__':
     app.run(debug=Config.DEBUG, port=Config.PORT)

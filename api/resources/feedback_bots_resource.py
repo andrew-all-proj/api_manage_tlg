@@ -1,10 +1,11 @@
 from flask_apispec.views import MethodResource
 from flask_pyjwt import require_token, current_token
-from api.models.feedback_bots_model import UsersToFeedbackBot, FeedbackBotsModel
+from api.models.feedback_bots.ban_users_feedback_bot import BanUsersFeedbackBotModel
+from api.models.feedback_bots.msg_feedback_bots_model import MsgFeedbackBotsModel
+from api.models.feedback_bots.feedback_bots_model import FeedbackBotsModel
 from flask_apispec import marshal_with, use_kwargs, doc
 from api.sсhemas.feedback_bots_schema import FeedbackBotsSchema, FeedbackBotsPostSchema
 from sqlalchemy import and_
-from webargs import fields
 
 
 def query_feedback_bot(id_user):

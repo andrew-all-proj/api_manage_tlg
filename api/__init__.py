@@ -1,4 +1,5 @@
 import logging
+from logging.handlers import RotatingFileHandler
 
 from flask import Flask, g, jsonify
 from flask_pyjwt import AuthManager
@@ -42,7 +43,17 @@ app.config.update({
 gunicorn_logger = logging.getLogger('gunicorn.error')
 app.logger.handlers = gunicorn_logger.handlers
 app.logger.setLevel(gunicorn_logger.level)
-logging.basicConfig(filename='error.log', level=logging.DEBUG)
+rfh = RotatingFileHandler(
+    filename=f"{Config.BASE_DIR}/api_managetlg.log",
+    mode='a',
+    maxBytes=5*1024*1024,
+    backupCount=2,
+    encoding=None
+)
+logging.basicConfig(level=logging.INFO,
+                    format='[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s',
+                    datefmt='%H:%M:%S',
+                    handlers=[rfh])
 
 api = Api(app)
 cors = CORS(app)

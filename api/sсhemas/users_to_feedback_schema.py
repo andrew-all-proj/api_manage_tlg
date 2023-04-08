@@ -1,7 +1,5 @@
-from marshmallow import validate
-
 from api import ma
-from api.models.feedback_bots_model import UsersToFeedbackBot
+from api.models.feedback_bots.feedback_bots_model import UsersToFeedbackBot
 
 
 class UsersToFeedbackBotSchema(ma.SQLAlchemySchema):
