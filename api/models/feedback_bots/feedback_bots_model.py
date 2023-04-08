@@ -12,6 +12,7 @@ class UsersToFeedbackBot(db.Model, ModelDbExt):
     id_feedback_bot = db.Column(db.Integer, db.ForeignKey("feedback_bots.id_feedback_bot"))
     id_user_telegram = db.Column(db.String(100), nullable=False)
     name_user = db.Column(db.String(100), nullable=False)
+    data_update = db.Column(db.DateTime, nullable=False, onupdate=datetime.datetime.now, default=datetime.datetime.now)
     __table_args__ = (db.UniqueConstraint('id_user_telegram', 'id_feedback_bot', name='_user_bot_uc'),)
 
     def __init__(self, id_feedback_bot, id_user_telegram, name_user):
