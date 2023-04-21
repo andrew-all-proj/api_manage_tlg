@@ -147,6 +147,7 @@ class MediaSetTagsResource(MethodResource):
     @doc(summary='Unset tags to Media')
     @doc(description='Full: Unset tags to Media')
     def delete(self, id_media, **kwargs):
+        print(id_media, kwargs)
         media = MediaContentModel.query.filter(and_(MediaContentModel.id_user == current_token.scope,
                                                     MediaContentModel.id_media == id_media,
                                                     MediaContentModel.is_archive == False)).first()
@@ -159,7 +160,10 @@ class MediaSetTagsResource(MethodResource):
             channel = get_channel(tag.id_channel, current_token.scope)
             if not channel:
                 return {"error": f"channel not found"}, 404
-            media.tags.remove(tag)
+            try:
+                media.tags.remove(tag)
+            except:
+                pass
         if not media.save():
             return {"error": "save in bd"}, 400
         return media, 200

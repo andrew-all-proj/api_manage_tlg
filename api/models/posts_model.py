@@ -13,7 +13,7 @@ class PostsModel(db.Model, ModelDbExt):
     __tablename__ = "posts"
 
     id_post = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(3000))
+    text = db.Column(db.String(5000))
     id_user = db.Column(db.Integer, db.ForeignKey("users.id_user"), nullable=False)
     date_create = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now)
     data_update = db.Column(db.DateTime, nullable=False, onupdate=datetime.datetime.now, default=datetime.datetime.now)
