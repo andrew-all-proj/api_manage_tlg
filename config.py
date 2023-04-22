@@ -32,8 +32,8 @@ class Config:
 
 class EmailConfig:
     BASE_LINK = 'managetlg.com/' + VERSION + '/email/confirm/'
-    HOST = 'smtp.gmail.com'
+    HOST = '****************'
     PORT = 587
-    USER = "info.manager.tlg@gmail.com"
-    PWD = "lyckbbkfasucxaak"
-    FROM = 'info.manager.tlg@gmail.com'
+    USER = "**********"
+    PWD = "****************"
+    FROM = '*****************'
