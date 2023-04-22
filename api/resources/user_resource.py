@@ -1,12 +1,10 @@
-from flask_apispec.views import MethodResource
-from api.models.users_model import UserModel
-from api.sсhemas.user_sсhema import UserSchema, UserRequestSchema, UserLisrSchema
 from flask_apispec import marshal_with, use_kwargs, doc
+from flask_apispec.views import MethodResource
 from flask_pyjwt import require_token, current_token
 
+from api.models.users_model import UserModel
+from api.sсhemas.user_sсhema import UserSchema, UserRequestSchema, UserLisrSchema
 from helpers.shortscuts import get_object_or_404
-
-
 # /v1/users
 from service.decodeBase64 import decode_base64
 

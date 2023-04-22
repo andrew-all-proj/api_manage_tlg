@@ -1,5 +1,7 @@
+from flask_apispec import marshal_with, use_kwargs, doc
 from flask_apispec.views import MethodResource
 from flask_pyjwt import require_token, current_token
+from sqlalchemy import and_
 from webargs import fields
 
 from api.models.channels_model import UserChannelModel
@@ -8,8 +10,6 @@ from api.models.posts_model import PostsModel, PostsModelAll
 from api.resources.channel_resource import get_chanel
 from api.resources.posts_resource import get_post
 from api.sсhemas.events_schema import EventsSchema, EventsCreateSchema, EventsChangeSchema, EventSchemaAll
-from flask_apispec import marshal_with, use_kwargs, doc
-from sqlalchemy import and_
 
 
 # /events/channels/<int:id_channel>
@@ -54,7 +54,8 @@ class EventsListResource(MethodResource):
         else:
             events = events.order_by(EventModel.date_start.desc())
         events_model.total_count = events.count()
-        events_model.items = events.order_by(EventModel.date_start.desc()).paginate(page=page, per_page=per_page, error_out=False).items
+        events_model.items = events.order_by(EventModel.date_start.desc()).paginate(page=page, per_page=per_page,
+                                                                                    error_out=False).items
         return events_model, 200
 
 

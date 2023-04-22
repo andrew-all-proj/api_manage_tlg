@@ -1,5 +1,6 @@
-import click
 import json
+
+import click
 
 from api import app
 from api.models.channels_model import ChannelModel, UserChannelModel
@@ -9,7 +10,6 @@ from api.models.media_tags_model import TagModel
 from api.models.posts_model import PostsModel, media
 from api.models.users_model import UserModel
 from config import BASE_DIR
-from sqlalchemy.exc import IntegrityError
 
 
 @click.command
@@ -26,7 +26,7 @@ def load_fixture(fixture):
         "TypeMediaModel": TypeMediaModel,
         "UserChannelModel": UserChannelModel,
         "MediaContentModel": MediaContentModel,
-        "media": media #добавить метод для связывания
+        "media": media  # добавить метод для связывания
     }
     coun = 0
     with open(path_to_fixture, "r", encoding="UTF-8") as f:
@@ -37,7 +37,7 @@ def load_fixture(fixture):
             model_object = model(**record)
             result = model_object.save()
             if result:
-                coun=coun + 1
+                coun = coun + 1
     print(f"add {coun}")
 
 

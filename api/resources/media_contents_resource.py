@@ -1,24 +1,21 @@
 import logging
-from datetime import datetime
 import os
+from datetime import datetime
 
 from flask import send_file
+from flask_apispec import marshal_with, use_kwargs, doc
 from flask_apispec.views import MethodResource
 from flask_pyjwt import require_token, current_token
 from sqlalchemy import and_
+from sqlalchemy.orm import aliased
 from webargs import fields
-from flask_apispec import marshal_with, use_kwargs, doc
 
 from api import db
-from api.models.channels_model import ChannelModel
-from api.models.events_model import EventModel
 from api.models.media_contents_model import TypeMediaModel, MediaContentModel, MediaModelAll
 from api.models.media_tags_model import TagModel, tags
 from api.models.posts_model import PostsModel, media as PostsMediaModel
 from api.sсhemas.media_contents_schema import MediaContentsSchema, MediaChangeSchema, MediaSchemaAll
-
-from config import Config, CONTENT_DIR
-from sqlalchemy.orm import aliased
+from config import CONTENT_DIR
 
 
 def get_media(id_user, id_media):
@@ -78,13 +75,12 @@ class MediaListResource(MethodResource):
                 .filter(TagModel.id_tag.in_(list_tags))
             media = media.filter(MediaContentModel.id_media.in_(query_list_in_tags))
         subq = media.limit(limit).subquery()
-        ua = aliased(MediaContentModel, subq)                                    #Make subquery bcs don't work limit
+        ua = aliased(MediaContentModel, subq)  # Make subquery bcs don't work limit
         media_model.total_count = 100
         media = db.session.query(ua)
         media_model.total_count = media.count()
         media_model.items = media.paginate(page=page, per_page=per_page, error_out=False).items
         return media_model, 200
-
 
     @require_token()
     @doc(security=[{"bearerAuth": []}])
@@ -168,13 +164,13 @@ class MediaResource(MethodResource):
 # /v1/media/download/<id_media>
 @doc(description='Api for media', tags=['Media'])
 class MediaDownloadResource(MethodResource):
-    #@require_token()
-    #@doc(security=[{"bearerAuth": []}])
+    # @require_token()
+    # @doc(security=[{"bearerAuth": []}])
     @doc(summary='Download media by id')
     @doc(description='Full: Download media by id')
     def get(self, id_media):
         media = MediaContentModel.query.filter(and_(MediaContentModel.id_media == id_media,
-                                               MediaContentModel.is_archive == False)).first()
+                                                    MediaContentModel.is_archive == False)).first()
         if not media:
             return {"error": "Not file"}, 404
         type_media = TypeMediaModel.query.filter_by(id_type_media=media.id_type_media).first()

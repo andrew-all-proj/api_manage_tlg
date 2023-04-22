@@ -1,3 +1,4 @@
+from flask_apispec import marshal_with, doc, use_kwargs
 from flask_apispec.views import MethodResource
 from flask_pyjwt import require_token, current_token
 from sqlalchemy import and_
@@ -5,7 +6,6 @@ from webargs import fields
 
 from api.models.media_contents_model import MediaContentModel
 from api.models.posts_model import PostsModel, PostsModelAll
-from flask_apispec import marshal_with, doc, use_kwargs
 from api.sсhemas.post_schema import PostSchema, PostCreateSchema, PostSchemaAll
 
 
@@ -13,7 +13,6 @@ def get_post(id_user, id_post):
     return PostsModel.query.filter(and_(PostsModel.id_user == id_user,
                                         PostsModel.id_post == id_post,
                                         PostsModel.is_archive == False)).first()
-
 
 
 # /posts/?filters

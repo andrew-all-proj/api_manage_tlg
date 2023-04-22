@@ -19,4 +19,3 @@ class UsersToFeedbackBotPostSchema(ma.SQLAlchemySchema):
     id_feedback_bot = ma.auto_field(required=True)
     id_user_telegram = ma.auto_field(required=True)
     name_user = ma.auto_field(required=True)
-

@@ -1,10 +1,10 @@
+from flask_apispec import marshal_with, use_kwargs, doc
 from flask_apispec.views import MethodResource
 from flask_pyjwt import require_token, current_token
 from sqlalchemy import and_
 
 from api.models.channels_model import ChannelModel, UserChannelModel
 from api.sсhemas.channel_schema import ChannelSchema, ChannelRequestSchema, ChannelChangeSchema
-from flask_apispec import marshal_with, use_kwargs, doc
 
 
 def get_chanel(id_user, id_channel):

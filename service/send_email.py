@@ -2,9 +2,11 @@ import logging
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
 from config import EmailConfig
 
-#DONT WORK SIMPEL TEXT BODY
+
+# DONT WORK SIMPEL TEXT BODY
 def send_email(recipients, subject, body=None, html=None):
     PORT_LIST = (25, 587, 465)
 
@@ -19,7 +21,7 @@ def send_email(recipients, subject, body=None, html=None):
         message = """From: %s\nTo: %s\nSubject: %s\n\n%s
         """ % (FROM, ", ".join(TO), SUBJECT, TEXT)
     else:
-                # https://stackoverflow.com/questions/882712/sending-html-email-using-python#882770
+        # https://stackoverflow.com/questions/882712/sending-html-email-using-python#882770
         msg = MIMEMultipart('alternative')
         msg['Subject'] = SUBJECT
         msg['From'] = FROM
@@ -37,7 +39,6 @@ def send_email(recipients, subject, body=None, html=None):
         msg.attach(part2)
 
         message = msg.as_string()
-
 
     try:
         if EmailConfig.PORT not in PORT_LIST:

@@ -1,14 +1,13 @@
+from flask_apispec import marshal_with, use_kwargs, doc
 from flask_apispec.views import MethodResource
 from flask_pyjwt import require_token, current_token
+from sqlalchemy import and_
+from webargs import fields
 
 from api import db
 from api.models.channels_model import ChannelModel, UserChannelModel
 from api.models.media_contents_model import MediaContentModel
 from api.models.media_tags_model import TagModel, tags
-from flask_apispec import marshal_with, use_kwargs, doc
-from sqlalchemy import and_
-from webargs import fields
-
 from api.sсhemas.media_contents_schema import MediaContentsSchema
 from api.sсhemas.tag_schema import TagListSchema, TagSchema, TagCreateSchema, TagChangeSchema
 

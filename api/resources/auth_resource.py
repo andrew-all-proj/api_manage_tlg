@@ -1,22 +1,20 @@
 import logging
 
-import flask
-from flask import request, url_for, render_template
+from flask import request, render_template
+from flask_apispec import doc, use_kwargs, marshal_with
+from flask_apispec.views import MethodResource
 
 import config
 from api import auth_manager, app
-from flask_apispec.views import MethodResource
-from flask_apispec import doc, use_kwargs, marshal_with
 from api.models.auth_model import AuthHistoryModel
 from api.models.users_model import UserModel
 from api.sсhemas.auth_schema import AuthSchema, AutrResponseSchema
-
 from service.confirm_email import generate_confirmation_token, confirm_token
 from service.decodeBase64 import decode_base64
 from service.send_email import send_email
 
 
-#/v1/auth
+# /v1/auth
 @doc(description='Api for authentication user', tags=['Authentication'])
 class TokenResource(MethodResource):
     @doc(summary='Get token')
@@ -36,13 +34,13 @@ class TokenResource(MethodResource):
             auth_token = auth_manager.auth_token(email, user.id_user)
             auth_history = AuthHistoryModel(id_user=user.id_user, from_is=request.host)
             auth_history.save()
-            #refresh_token = auth_manager.refresh_token(user.id_user)  # добавить функцию!!!!
+            # refresh_token = auth_manager.refresh_token(user.id_user)  # добавить функцию!!!!
             return {f"auth_token": auth_token.signed, "id_user": user.id_user, "user_name": user.user_name}, 200
         logging.info(f"Invalid password: {email}")
         return {"error": "Invalid login or password"}, 401
 
 
-#/email/<int:id user>
+# /email/<int:id user>
 @doc(description='Api for confirmation email', tags=['Authentication'])
 class SendTokenConfirmEmail(MethodResource):
     @doc(summary='GET id user')
@@ -56,7 +54,7 @@ class SendTokenConfirmEmail(MethodResource):
         token = generate_confirmation_token(user.email)
         confirm_url = config.EmailConfig.BASE_LINK + token
         send_email(
-              recipients=[user.email]
+            recipients=[user.email]
             , subject=f"confirm email"
             , html=f"Пройдите по ссылке для потверждения email или скопируйте и вставьте в адресную строку браузера: "
                    f"<a href=www.{confirm_url}> {confirm_url} </a>"
@@ -64,7 +62,7 @@ class SendTokenConfirmEmail(MethodResource):
         return 200
 
 
-#/email/confirm/<token>
+# /email/confirm/<token>
 @doc(description='Api for get token confirm email', tags=['Authentication'])
 class ConfirmEmail(MethodResource):
     @doc(summary='GET token with email')
@@ -86,5 +84,3 @@ class ConfirmEmail(MethodResource):
         )
 
         return response
-
-

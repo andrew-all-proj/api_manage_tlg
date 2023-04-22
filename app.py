@@ -1,7 +1,7 @@
 import logging
 
 from api import api, app, docs
-#from api.resources.auth_resource import TokenResource
+# from api.resources.auth_resource import TokenResource
 from api.resources.auth_resource import TokenResource, ConfirmEmail, SendTokenConfirmEmail
 from api.resources.channel_resource import ChannelsListResource, ChannelsResource, ChannelsSetUserResource
 from api.resources.events_resource import EventsListResource, EventsResource, EventsCreateResource
@@ -10,9 +10,9 @@ from api.resources.media_contents_resource import MediaListResource, MediaResour
 from api.resources.posts_resource import PostsListResource, AddMediaToPostResource, PostsResource, PostsCreateResource
 from api.resources.tags_resource import TagsListResource, MediaSetTagsResource, TagsResource, TagsCreateResource, \
     TagsMediaIdResource
+from api.resources.user_resource import UsersListResource, UserResource
 from api.resources.users_to_feedback_resource import FeedBackBotsUsersListResource, FeedBackBotsUserResource
 from config import Config
-from api.resources.user_resource import UsersListResource, UserResource
 
 # CRUD
 
@@ -44,7 +44,7 @@ api.add_resource(MediaListResource,
 api.add_resource(MediaResource,
                  f'/{Config.VERSION}/media/<int:id_media>')  # GET PUT
 api.add_resource(MediaDownloadResource,
-                 f'/{Config.VERSION}/media/download/<int:id_media>') # GET
+                 f'/{Config.VERSION}/media/download/<int:id_media>')  # GET
 
 api.add_resource(PostsListResource,
                  f'/{Config.VERSION}/posts/')  # GET, POST
@@ -82,7 +82,6 @@ api.add_resource(FeedBackBotsUsersListResource,
                  f'/{Config.VERSION}/feedback_bots/users')  # GET(ALL) POST
 api.add_resource(FeedBackBotsUserResource,
                  f'/{Config.VERSION}/feedback_bots/users/<int:id_users_to_feedback_bot>')  # GET PUT DELETE
-
 
 docs.register(TokenResource)
 docs.register(SendTokenConfirmEmail)

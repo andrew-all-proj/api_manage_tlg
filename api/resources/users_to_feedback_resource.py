@@ -1,18 +1,20 @@
+from flask_apispec import marshal_with, use_kwargs, doc
 from flask_apispec.views import MethodResource
 from flask_pyjwt import require_token, current_token
-from api.models.feedback_bots.feedback_bots_model import UsersToFeedbackBot, FeedbackBotsModel
-from flask_apispec import marshal_with, use_kwargs, doc
 from sqlalchemy import and_
 
+from api.models.feedback_bots.feedback_bots_model import UsersToFeedbackBot, FeedbackBotsModel
 from api.sсhemas.users_to_feedback_schema import UsersToFeedbackBotPostSchema, UsersToFeedbackBotSchema
 
 
 def user_feedback_bot(id_user):
     return UsersToFeedbackBot.query.filter(and_(FeedbackBotsModel.admin_user_id == id_user))
 
+
 def query_feedback_bot(id_user):
     return FeedbackBotsModel.query.filter(and_(FeedbackBotsModel.admin_user_id == id_user,
                                                FeedbackBotsModel.is_archive == False))
+
 
 @doc(description='Api for create users for feedback bot', tags=['Feedback list users'])
 class FeedBackBotsUsersListResource(MethodResource):
@@ -52,12 +54,11 @@ class FeedBackBotsUserResource(MethodResource):
     @doc(summary='Get user feedback bot by id')
     @doc(description='Full: Get user feedback bot by id')
     def get(self, id_users_to_feedback_bot):
-        user_feedback_bot = UsersToFeedbackBot.query.filter\
+        user_feedback_bot = UsersToFeedbackBot.query.filter \
             (UsersToFeedbackBot.id_users_to_feedback_bot == id_users_to_feedback_bot).first()
         if not user_feedback_bot:
             return {"error": "not found"}, 404
         return user_feedback_bot, 200
-
 
     @require_token()
     @doc(security=[{"bearerAuth": []}])
@@ -76,7 +77,6 @@ class FeedBackBotsUserResource(MethodResource):
         if not user_feedback_bot.save():
             return {"error": "update data base"}, 400
         return user_feedback_bot, 200
-
 
     @require_token()
     @doc(security=[{"bearerAuth": []}])
