@@ -10,3 +10,4 @@ tmp/
 *.pot
 content_media
 1-10
+config.py
