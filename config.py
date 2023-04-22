@@ -36,4 +36,4 @@ class EmailConfig:
     PORT = 587
     USER = "info.manager.tlg@gmail.com"
     PWD = "lyckbbkfasucxaak"
-    FROM = 'info.manager.tlg@gmail.com'
+    FROM = 'info.manager.tlg@gmail.co'
