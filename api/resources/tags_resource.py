@@ -146,7 +146,6 @@ class MediaSetTagsResource(MethodResource):
     @doc(summary='Unset tags to Media')
     @doc(description='Full: Unset tags to Media')
     def delete(self, id_media, **kwargs):
-        print(id_media, kwargs)
         media = MediaContentModel.query.filter(and_(MediaContentModel.id_user == current_token.scope,
                                                     MediaContentModel.id_media == id_media,
                                                     MediaContentModel.is_archive == False)).first()

@@ -1,6 +1,7 @@
 import logging
 import os
 from datetime import datetime
+import random
 
 from flask import send_file
 from flask_apispec import marshal_with, use_kwargs, doc
@@ -90,6 +91,7 @@ class MediaListResource(MethodResource):
     @use_kwargs({'file': fields.Raw()}, location='files')
     def post(self, **kwarg):
         logging.info(f"UPLOAD MEDIA")
+        print("LOAD MIDIA")
         file = kwarg.get('file')
         if not file:
             return {"error": "Not file"}, 400
@@ -101,9 +103,11 @@ class MediaListResource(MethodResource):
         if (type_media.type_media == 'audio'):
             gen_name = f"{root}.{type_media.extension}"
         else:
-            suffix_name = datetime.now().strftime("%y%m%d_%H%M%S")
+            random_number = str(random.randint(1, 100))
+            suffix_name = datetime.now().strftime("%y%m%d_%H%M%S%f") + random_number
             gen_name = f"{type_media.type_media}_{suffix_name}.{type_media.extension}"
         try:
+            print(f"{CONTENT_DIR}/{current_token.scope}/{type_media.name_dir}/{gen_name}")
             file.save(
                 f"{CONTENT_DIR}/{current_token.scope}/{type_media.name_dir}/{gen_name}")  # file/1/images/12333.jpg
         except FileNotFoundError:

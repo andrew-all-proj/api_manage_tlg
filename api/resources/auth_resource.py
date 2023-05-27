@@ -57,7 +57,7 @@ class SendTokenConfirmEmail(MethodResource):
             recipients=[user.email]
             , subject=f"confirm email"
             , html=f"Пройдите по ссылке для потверждения email или скопируйте и вставьте в адресную строку браузера: "
-                   f"<a href=www.{confirm_url}> {confirm_url} </a>"
+                   f"<a href=https://www.{confirm_url}> {confirm_url} </a>"
         )
         return 200
 
